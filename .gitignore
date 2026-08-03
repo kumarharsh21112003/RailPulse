@@ -1,0 +1,51 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Next.js
+/.next/
+/out/
+
+# Production
+/build
+
+# Misc & System
+.DS_Store
+*.pem
+*.tsbuildinfo
+next-env.d.ts
+
+# Debug & Execution Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+*.log
+.gemini-next-dev.log
+
+# Local Environment Variables & API Secrets (CRITICAL)
+.env*.local
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+
+# API Dumps, Secrets & Scraping Scratchpads
+rapidapi.json
+scratch/
+test-*.js
+test-*.ts
+ntes-*.ts
+restore_*.js
+check_ntes.js
+dump-ntes.js
+download-trains.js
+
+# Vercel
+.vercel

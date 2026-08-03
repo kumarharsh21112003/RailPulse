@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" width="1200" height="120">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#020617"/><stop offset="50%" style="stop-color:#0c1631"/><stop offset="100%" style="stop-color:#020617"/>
+    </linearGradient>
+    <filter id="g"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="1200" height="120" fill="url(#bg)"/>
+  <!-- Network nodes -->
+  <g filter="url(#g)">
+    <circle cx="200" cy="60" r="8" fill="none" stroke="#0284c7" stroke-width="1.5"><animate attributeName="r" values="6;10;6" dur="3s" repeatCount="indefinite"/></circle>
+    <circle cx="200" cy="60" r="3" fill="#0284c7"/>
+    <circle cx="400" cy="40" r="8" fill="none" stroke="#8b5cf6" stroke-width="1.5"><animate attributeName="r" values="6;10;6" dur="2.5s" repeatCount="indefinite"/></circle>
+    <circle cx="400" cy="40" r="3" fill="#8b5cf6"/>
+    <circle cx="600" cy="65" r="8" fill="none" stroke="#10b981" stroke-width="1.5"><animate attributeName="r" values="6;10;6" dur="3.5s" repeatCount="indefinite"/></circle>
+    <circle cx="600" cy="65" r="3" fill="#10b981"/>
+    <circle cx="800" cy="45" r="8" fill="none" stroke="#f59e0b" stroke-width="1.5"><animate attributeName="r" values="6;10;6" dur="2.8s" repeatCount="indefinite"/></circle>
+    <circle cx="800" cy="45" r="3" fill="#f59e0b"/>
+    <circle cx="1000" cy="55" r="8" fill="none" stroke="#ef4444" stroke-width="1.5"><animate attributeName="r" values="6;10;6" dur="3.2s" repeatCount="indefinite"/></circle>
+    <circle cx="1000" cy="55" r="3" fill="#ef4444"/>
+  </g>
+  <!-- Connection lines with data pulses -->
+  <line x1="208" y1="58" x2="392" y2="42" stroke="#1e3a5f" stroke-width="1"/>
+  <line x1="408" y1="42" x2="592" y2="63" stroke="#1e3a5f" stroke-width="1"/>
+  <line x1="608" y1="63" x2="792" y2="47" stroke="#1e3a5f" stroke-width="1"/>
+  <line x1="808" y1="47" x2="992" y2="57" stroke="#1e3a5f" stroke-width="1"/>
+  <!-- Pulsing data packets -->
+  <circle r="3" fill="#38bdf8" filter="url(#g)">
+    <animateMotion dur="2s" repeatCount="indefinite" path="M200,60 L400,40 L600,65 L800,45 L1000,55"/>
+  </circle>
+  <circle r="3" fill="#a78bfa" filter="url(#g)">
+    <animateMotion dur="2s" repeatCount="indefinite" path="M1000,55 L800,45 L600,65 L400,40 L200,60" begin="1s"/>
+  </circle>
+  <!-- Title -->
+  <text x="600" y="105" text-anchor="middle" font-family="monospace" font-size="24" font-weight="bold" fill="#8b5cf6" filter="url(#g)" letter-spacing="8">🏗️ ARCHITECTURE</text>
+</svg>

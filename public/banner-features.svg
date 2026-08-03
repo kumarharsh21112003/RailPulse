@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" width="1200" height="120">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#020617"/><stop offset="50%" style="stop-color:#0c1631"/><stop offset="100%" style="stop-color:#020617"/>
+    </linearGradient>
+    <filter id="g"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="1200" height="120" fill="url(#bg)"/>
+  <!-- Departure board dots -->
+  <g opacity="0.15">
+    <circle cx="50" cy="20" r="1.5" fill="#38bdf8"/><circle cx="70" cy="20" r="1.5" fill="#38bdf8"/>
+    <circle cx="90" cy="20" r="1.5" fill="#38bdf8"/><circle cx="110" cy="20" r="1.5" fill="#38bdf8"/>
+    <circle cx="50" cy="35" r="1.5" fill="#38bdf8"/><circle cx="70" cy="35" r="1.5" fill="#38bdf8"/>
+    <circle cx="90" cy="35" r="1.5" fill="#38bdf8"/><circle cx="110" cy="35" r="1.5" fill="#38bdf8"/>
+    <circle cx="1090" cy="20" r="1.5" fill="#38bdf8"/><circle cx="1110" cy="20" r="1.5" fill="#38bdf8"/>
+    <circle cx="1130" cy="20" r="1.5" fill="#38bdf8"/><circle cx="1150" cy="20" r="1.5" fill="#38bdf8"/>
+    <circle cx="1090" cy="35" r="1.5" fill="#38bdf8"/><circle cx="1110" cy="35" r="1.5" fill="#38bdf8"/>
+    <circle cx="1130" cy="35" r="1.5" fill="#38bdf8"/><circle cx="1150" cy="35" r="1.5" fill="#38bdf8"/>
+  </g>
+  <!-- LED scan line -->
+  <rect x="0" y="0" width="1200" height="2" fill="#38bdf8" opacity="0.1">
+    <animate attributeName="y" values="0;120;0" dur="4s" repeatCount="indefinite"/>
+  </rect>
+  <!-- Title -->
+  <text x="600" y="55" text-anchor="middle" font-family="monospace" font-size="28" font-weight="bold" fill="#38bdf8" filter="url(#g)" letter-spacing="12">🚉 DEPARTURE BOARD</text>
+  <text x="600" y="80" text-anchor="middle" font-family="monospace" font-size="12" fill="#475569" letter-spacing="3">ALL SYSTEMS OPERATIONAL • 8 FEATURES LIVE</text>
+  <!-- Signal -->
+  <circle cx="35" cy="60" r="6" fill="#22c55e" filter="url(#g)"><animate attributeName="opacity" values="0.4;1;0.4" dur="2s" repeatCount="indefinite"/></circle>
+  <circle cx="1165" cy="60" r="6" fill="#22c55e" filter="url(#g)"><animate attributeName="opacity" values="0.4;1;0.4" dur="2.3s" repeatCount="indefinite"/></circle>
+  <!-- Bottom line -->
+  <line x1="100" y1="100" x2="1100" y2="100" stroke="#1e3a5f" stroke-width="1"/>
+  <rect x="-200" y="99" width="200" height="2" fill="#38bdf8" opacity="0.6"><animate attributeName="x" from="-200" to="1200" dur="3s" repeatCount="indefinite"/></rect>
+</svg>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" width="1200" height="120">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#020617"/><stop offset="50%" style="stop-color:#0c1631"/><stop offset="100%" style="stop-color:#020617"/>
+    </linearGradient>
+    <filter id="g"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="1200" height="120" fill="url(#bg)"/>
+  <!-- Rocket -->
+  <g transform="translate(100,60)">
+    <polygon points="0,-15 5,5 -5,5" fill="#f59e0b"/>
+    <rect x="-4" y="5" width="8" height="10" rx="1" fill="#e2e8f0"/>
+    <polygon points="-4,15 0,20 4,15" fill="#ef4444"><animate attributeName="opacity" values="0.5;1;0.5" dur="0.3s" repeatCount="indefinite"/></polygon>
+    <animateTransform attributeName="transform" type="translate" values="100,70;100,55;100,70" dur="2s" repeatCount="indefinite"/>
+  </g>
+  <!-- Terminal lines appearing -->
+  <text x="250" y="45" font-family="monospace" font-size="11" fill="#64748b">$ git clone https://github.com/kumarharsh21112003/RailPulse.git</text>
+  <text x="250" y="62" font-family="monospace" font-size="11" fill="#64748b">$ npm install</text>
+  <text x="250" y="79" font-family="monospace" font-size="11" fill="#22c55e">$ npm run dev</text>
+  <text x="250" y="96" font-family="monospace" font-size="11" fill="#38bdf8">✅ http://localhost:3000</text>
+  <rect x="450" y="67" width="8" height="14" fill="#22c55e"><animate attributeName="opacity" values="0;1;0" dur="1s" repeatCount="indefinite"/></rect>
+  <!-- Title -->
+  <text x="600" y="25" text-anchor="middle" font-family="monospace" font-size="28" font-weight="bold" fill="#f59e0b" filter="url(#g)" letter-spacing="8">🚀 QUICKSTART</text>
+</svg>

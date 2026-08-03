@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" width="1200" height="120">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#020617"/><stop offset="50%" style="stop-color:#0c1631"/><stop offset="100%" style="stop-color:#020617"/>
+    </linearGradient>
+    <filter id="g"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="1200" height="120" fill="url(#bg)"/>
+  <!-- Terminal cursor blinking -->
+  <g>
+    <text x="200" y="75" font-family="monospace" font-size="14" fill="#22c55e">$ curl /api/train/12301</text>
+    <rect x="430" y="62" width="10" height="16" fill="#22c55e"><animate attributeName="opacity" values="0;1;0" dur="1s" repeatCount="indefinite"/></rect>
+  </g>
+  <g>
+    <text x="650" y="75" font-family="monospace" font-size="12" fill="#475569">{"status": "on_time", "speed": 128.4}</text>
+    <animate attributeName="opacity" values="0;0;1;1" dur="3s" repeatCount="indefinite"/>
+  </g>
+  <!-- Radio waves from antenna -->
+  <g transform="translate(80,60)" filter="url(#g)">
+    <line x1="0" y1="0" x2="0" y2="-30" stroke="#475569" stroke-width="2"/>
+    <circle cx="0" cy="-30" r="3" fill="#22c55e"><animate attributeName="opacity" values="0.5;1;0.5" dur="1s" repeatCount="indefinite"/></circle>
+    <circle cx="0" cy="-30" r="10" fill="none" stroke="#22c55e" stroke-width="0.5" opacity="0"><animate attributeName="r" values="5;20" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.8;0" dur="2s" repeatCount="indefinite"/></circle>
+    <circle cx="0" cy="-30" r="10" fill="none" stroke="#22c55e" stroke-width="0.5" opacity="0"><animate attributeName="r" values="5;20" dur="2s" repeatCount="indefinite" begin="1s"/><animate attributeName="opacity" values="0.8;0" dur="2s" repeatCount="indefinite" begin="1s"/></circle>
+  </g>
+  <!-- Title -->
+  <text x="600" y="30" text-anchor="middle" font-family="monospace" font-size="28" font-weight="bold" fill="#22c55e" filter="url(#g)" letter-spacing="8">📡 API REFERENCE</text>
+</svg>

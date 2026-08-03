@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" width="1200" height="120">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#020617"/><stop offset="50%" style="stop-color:#0c1631"/><stop offset="100%" style="stop-color:#020617"/>
+    </linearGradient>
+    <filter id="g"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="1200" height="120" fill="url(#bg)"/>
+  <!-- Train coaches animated -->
+  <g>
+    <animateTransform attributeName="transform" type="translate" from="-600 0" to="1200 0" dur="6s" repeatCount="indefinite"/>
+    <rect x="0" y="45" rx="3" width="60" height="22" fill="#e2e8f0"/><rect x="0" y="50" width="60" height="5" fill="#0284c7"/>
+    <text x="30" y="60" text-anchor="middle" font-family="monospace" font-size="7" fill="#020617">WAP-7</text>
+    <rect x="64" y="45" rx="2" width="50" height="22" fill="#e2e8f0"/><rect x="64" y="50" width="50" height="5" fill="#0284c7"/>
+    <text x="89" y="60" text-anchor="middle" font-family="monospace" font-size="7" fill="#020617">EOG</text>
+    <rect x="118" y="45" rx="2" width="50" height="22" fill="#bfdbfe"/><rect x="118" y="50" width="50" height="5" fill="#2563eb"/>
+    <text x="143" y="60" text-anchor="middle" font-family="monospace" font-size="7" fill="#020617">H1</text>
+    <rect x="172" y="45" rx="2" width="50" height="22" fill="#bfdbfe"/><rect x="172" y="50" width="50" height="5" fill="#2563eb"/>
+    <text x="197" y="60" text-anchor="middle" font-family="monospace" font-size="7" fill="#020617">A1</text>
+    <rect x="226" y="45" rx="2" width="50" height="22" fill="#bfdbfe"/><rect x="226" y="50" width="50" height="5" fill="#2563eb"/>
+    <text x="251" y="60" text-anchor="middle" font-family="monospace" font-size="7" fill="#020617">A2</text>
+    <rect x="280" y="45" rx="2" width="50" height="22" fill="#a5f3fc"/><rect x="280" y="50" width="50" height="5" fill="#0891b2"/>
+    <text x="305" y="60" text-anchor="middle" font-family="monospace" font-size="7" fill="#020617">B1</text>
+    <rect x="334" y="45" rx="2" width="50" height="22" fill="#a5f3fc"/><rect x="334" y="50" width="50" height="5" fill="#0891b2"/>
+    <text x="359" y="60" text-anchor="middle" font-family="monospace" font-size="7" fill="#020617">B2</text>
+    <rect x="388" y="45" rx="2" width="50" height="22" fill="#fde68a"/><rect x="388" y="50" width="50" height="5" fill="#d97706"/>
+    <text x="413" y="60" text-anchor="middle" font-family="monospace" font-size="7" fill="#020617">PC</text>
+    <rect x="442" y="45" rx="2" width="50" height="22" fill="#d9f99d"/><rect x="442" y="50" width="50" height="5" fill="#65a30d"/>
+    <text x="467" y="60" text-anchor="middle" font-family="monospace" font-size="7" fill="#020617">S1</text>
+    <rect x="496" y="45" rx="2" width="50" height="22" fill="#e2e8f0"/><rect x="496" y="50" width="50" height="5" fill="#0284c7"/>
+    <text x="521" y="60" text-anchor="middle" font-family="monospace" font-size="7" fill="#020617">EOG</text>
+    <!-- Track under coaches -->
+    <line x1="-10" y1="69" x2="556" y2="69" stroke="#475569" stroke-width="2"/>
+    <line x1="-10" y1="73" x2="556" y2="73" stroke="#475569" stroke-width="2"/>
+  </g>
+  <!-- Title -->
+  <text x="600" y="30" text-anchor="middle" font-family="monospace" font-size="28" font-weight="bold" fill="#06b6d4" filter="url(#g)" letter-spacing="8">🚃 RAKE COMPOSITION</text>
+  <!-- Platform -->
+  <rect x="100" y="95" width="1000" height="15" rx="2" fill="#1e293b"/>
+  <text x="600" y="106" text-anchor="middle" font-family="monospace" font-size="9" fill="#475569">━━━ P L A T F O R M ━━━</text>
+</svg>
