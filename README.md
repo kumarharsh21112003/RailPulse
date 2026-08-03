@@ -304,7 +304,7 @@ npm run dev
 
 ## ⚠️ Disclaimer
 
-> **This is an educational project.** RailPulse is built for learning, portfolio demonstration, and academic purposes only. It is **NOT** affiliated with Indian Railways, IRCTC, CRIS, or NTES. Train data is sourced from publicly accessible endpoints. For official information, visit [enquiry.indianrail.gov.in](https://enquiry.indianrail.gov.in).
+> **This is an educational project.** RailPulse is built for learning, portfolio demonstration, and academic purposes only. It is **NOT** affiliated with Indian Railways, IRCTC, CRIS, or NTES. Train data is sourced from publicly accessible endpoints.
 
 ---
 
