@@ -312,6 +312,48 @@ async function geocodeStation(name: string, defaultLat: number, defaultLng: numb
 }
 
 async function generateFallbackJourney(trainNumber: string, date?: string): Promise<LiveJourney | null> {
+  // Try to get full static schedule from ConfirmTkt's live page
+  const confirmTktData = await fetchConfirmTktLiveStatus(trainNumber, undefined);
+  
+  if (confirmTktData && confirmTktData.stations.length > 2) {
+    const stations = confirmTktData.stations.map((s) => ({
+      ...s,
+      actualArrival: undefined,
+      actualDeparture: undefined,
+      delayMinutes: 0,
+      status: 'passed' as const, // For past dates, assume passed
+    }));
+
+    let startDateStr = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date()).replace(/ /g, '-');
+    if (date && date.match(/^\d{4}-\d{2}-\d{2}$/)) {
+      startDateStr = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(date)).replace(/ /g, '-');
+    }
+
+    return {
+      ...confirmTktData,
+      status: 'completed',
+      delayMinutes: 0,
+      speedKmh: 0,
+      distanceCoveredKm: confirmTktData.totalDistanceKm,
+      remainingDistanceKm: 0,
+      completionPercentage: 100,
+      startDate: startDateStr,
+      lastUpdated: new Date().toISOString(),
+      ETA: 'Journey Completed',
+      currentLocation: {
+        ...confirmTktData.currentLocation,
+        speedKmh: 0,
+        isMoving: false,
+      },
+      currentStation: undefined,
+      nextStation: undefined,
+      previousStation: stations[stations.length - 1],
+      stations,
+      updateMessage: 'Live data unavailable. Showing scheduled route.',
+    };
+  }
+
+  // If ConfirmTkt fails entirely, fall back to the basic 2-station dummy
   const localInfo = searchLocalTrains(trainNumber)[0];
   
   const originName = localInfo?.from || 'Mumbai Central';
@@ -355,12 +397,10 @@ async function generateFallbackJourney(trainNumber: string, date?: string): Prom
       scheduledDeparture: '08:32',
       delayMinutes: 8,
       distanceKm: 1384,
-      status: 'upcoming',
+      status: 'passed',
       platform: '1',
     },
   ];
-
-  const simulatedSpeed = Math.floor(Math.random() * (115 - 75 + 1)) + 75; 
 
   let startDateStr = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date()).replace(/ /g, '-');
   if (date && date.match(/^\d{4}-\d{2}-\d{2}$/)) {
@@ -374,25 +414,25 @@ async function generateFallbackJourney(trainNumber: string, date?: string): Prom
     origin: { code: originCode, name: originName },
     destination: { code: destCode, name: destName },
     currentLocation: {
-      lat: lat2,
-      lng: lng2,
+      lat: destLat,
+      lng: destLng,
       heading: 45,
-      speedKmh: simulatedSpeed,
-      isMoving: true,
+      speedKmh: 0,
+      isMoving: false,
     },
-    status: 'running',
+    status: 'completed',
     delayMinutes: 8,
-    speedKmh: simulatedSpeed,
-    distanceCoveredKm: 920,
-    remainingDistanceKm: 464,
+    speedKmh: 0,
+    distanceCoveredKm: 1384,
+    remainingDistanceKm: 0,
     totalDistanceKm: 1384,
-    completionPercentage: 66.5,
+    completionPercentage: 100,
     lastUpdated: new Date().toISOString(),
     startDate: startDateStr,
-    ETA: `${stations[1].name} at 08:32`,
-    previousStation: stations[0],
-    currentStation: stations[0],
-    nextStation: stations[1],
+    ETA: `Journey Completed`,
+    previousStation: stations[1],
+    currentStation: undefined,
+    nextStation: undefined,
     stations,
     routeGeometry: [
       [origLng, origLat],
@@ -400,6 +440,7 @@ async function generateFallbackJourney(trainNumber: string, date?: string): Prom
       [lng2, lat2],
       [destLng, destLat],
     ],
+    updateMessage: 'Live data unavailable. Showing scheduled route.',
   };
 }
 
