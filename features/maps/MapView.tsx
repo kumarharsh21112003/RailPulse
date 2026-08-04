@@ -60,10 +60,11 @@ export default function MapView({ journey, className }: MapViewProps) {
   useEffect(() => {
     if (!mapContainerRef.current) return;
 
-    const isDarkMode = document.documentElement.classList.contains('dark') || window.matchMedia('(prefers-color-scheme: dark)').matches;
+    // Only use dark mode map if the UI itself is in dark mode
+    const isDarkMode = document.documentElement.classList.contains('dark');
 
     const styleUrl = MAPTILER_KEY
-      ? `https://api.maptiler.com/maps/${isDarkMode ? 'streets-v2-dark' : 'streets-v2'}/style.json?key=${MAPTILER_KEY}`
+      ? `https://api.maptiler.com/maps/${isDarkMode ? 'basic-v2-dark' : 'streets-v2'}/style.json?key=${MAPTILER_KEY}`
       : {
           version: 8 as const,
           sources: {
