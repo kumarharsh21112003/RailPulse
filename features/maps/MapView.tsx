@@ -88,6 +88,7 @@ export default function MapView({ journey, className }: MapViewProps) {
       center,
       zoom: 11,
       pitch: 40,
+      attributionControl: false,
     });
 
     map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right');
