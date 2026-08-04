@@ -16,7 +16,7 @@ export async function fetchConfirmTktLiveStatus(trainNumber: string, date?: stri
   const url = `https://www.confirmtkt.com/train-running-status/${trainNumber}`;
   
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 3000);
+  const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout for 2G networks
   try {
     const res = await fetch(url, {
       headers: {

@@ -36,7 +36,7 @@ export async function fetchNtesRaw(query: string, retries = 1): Promise<any> {
   
   for (let attempt = 0; attempt <= retries; attempt++) {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 second strict timeout
+    const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout for 2G networks
     try {
       const res = await fetch('https://enquiry.indianrail.gov.in/crisns/AppServAnd', {
         method: 'POST',
