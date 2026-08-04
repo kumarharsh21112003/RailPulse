@@ -31,10 +31,12 @@ export function buildNtesPayload(data: string): string {
   return `${ntesHash(data)}#${ntesEncrypt(data)}`;
 }
 
-export async function fetchNtesRaw(query: string, retries = 2): Promise<any> {
+export async function fetchNtesRaw(query: string, retries = 1): Promise<any> {
   const payload = `${ntesHash(query)}#${ntesEncrypt(query)}`;
   
   for (let attempt = 0; attempt <= retries; attempt++) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 second strict timeout
     try {
       const res = await fetch('https://enquiry.indianrail.gov.in/crisns/AppServAnd', {
         method: 'POST',
@@ -43,19 +45,20 @@ export async function fetchNtesRaw(query: string, retries = 2): Promise<any> {
           'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 11)'
         },
         body: JSON.stringify({ jsonIn: payload }),
-        cache: 'no-store'
+        cache: 'no-store',
+        signal: controller.signal
       });
 
       if (!res.ok) {
         if (attempt === retries) throw new Error(`NTES HTTP ${res.status}`);
-        await new Promise(r => setTimeout(r, 1000));
+        await new Promise(r => setTimeout(r, 500));
         continue;
       }
 
       const text = await res.text();
       if (!text || text.trim() === '') {
         if (attempt === retries) throw new Error('Unexpected end of JSON input (empty response)');
-        await new Promise(r => setTimeout(r, 1000));
+        await new Promise(r => setTimeout(r, 500));
         continue;
       }
 
@@ -66,7 +69,9 @@ export async function fetchNtesRaw(query: string, retries = 2): Promise<any> {
       return json;
     } catch (error) {
       if (attempt === retries) throw error;
-      await new Promise(r => setTimeout(r, 1000));
+      await new Promise(r => setTimeout(r, 500));
+    } finally {
+      clearTimeout(timeoutId);
     }
   }
 }

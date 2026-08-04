@@ -15,12 +15,15 @@ export async function fetchConfirmTktLiveStatus(trainNumber: string, date?: stri
   // but for now we'll just hit the main page.
   const url = `https://www.confirmtkt.com/train-running-status/${trainNumber}`;
   
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 3000);
   try {
     const res = await fetch(url, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
       },
-      next: { revalidate: 0 }
+      next: { revalidate: 0 },
+      signal: controller.signal
     });
     
     if (!res.ok) return null;
@@ -133,6 +136,8 @@ export async function fetchConfirmTktLiveStatus(trainNumber: string, date?: stri
   } catch (err) {
     console.error("ConfirmTkt fetch error:", err);
     return null;
+  } finally {
+    clearTimeout(timeoutId);
   }
 }
 
