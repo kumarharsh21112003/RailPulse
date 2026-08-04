@@ -103,6 +103,12 @@ export async function fetchConfirmTktLiveStatus(trainNumber: string, date?: stri
     else if (currentIdx === stations.length - 1) journeyStatus = 'completed';
     else if (currentStation && currentStation.delayMinutes > 0) journeyStatus = 'delayed';
 
+    // If the train hasn't started, ConfirmTkt sometimes returns bogus delay values from the previous day.
+    // We should zero them out to prevent confusing "+43m delay" UI for a train that hasn't even begun.
+    if (journeyStatus === 'not_started') {
+      stations.forEach(s => s.delayMinutes = 0);
+    }
+
     return {
       trainId: trainNumber,
       number: trainNumber,
