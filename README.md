@@ -38,6 +38,8 @@
 
 It tracks live train positions, predicts delays using block-section signaling logic, renders GPU-accelerated route maps on WebGL, and provides granular coach composition data — all within **sub-300ms** response windows across **8,000+ Indian railway stations**.
 
+<img src="public/track-divider.svg" width="100%" />
+
 <!-- ━━━━━━━━━━━━━ FEATURES BANNER ━━━━━━━━━━━━━ -->
 <img src="public/banner-features.svg" width="100%" />
 
@@ -61,6 +63,8 @@ It tracks live train positions, predicts delays using block-section signaling lo
 │                                                                                            │
 └────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
+
+<img src="public/track-divider.svg" width="100%" />
 
 <!-- ━━━━━━━━━━━━━ ENGINE BANNER ━━━━━━━━━━━━━ -->
 <img src="public/banner-engine.svg" width="100%" />
@@ -87,6 +91,8 @@ GPS beacons in remote zones transmit erratically. RailPulse bridges gaps using *
   NTES PRIMARY ━━► (< 200ms) ━━► RAILRADAR ━━► (fallback) ━━► DEAD-RECKONING CACHE
 ```
 
+<img src="public/track-divider.svg" width="100%" />
+
 <!-- ━━━━━━━━━━━━━ RAKE BANNER ━━━━━━━━━━━━━ -->
 <img src="public/banner-rake.svg" width="100%" />
 
@@ -104,6 +110,8 @@ GPS beacons in remote zones transmit erratically. RailPulse bridges gaps using *
   ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
   ◄━━━━━━━━━━━━━━━━━━━━━━━━━━━ P L A T F O R M ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━►
 ```
+
+<img src="public/track-divider.svg" width="100%" />
 
 <!-- ━━━━━━━━━━━━━ ARCH BANNER ━━━━━━━━━━━━━ -->
 <img src="public/banner-arch.svg" width="100%" />
@@ -153,6 +161,8 @@ GPS beacons in remote zones transmit erratically. RailPulse bridges gaps using *
                   └─────────────────────────────────────────────────────────┘
 ```
 
+<img src="public/track-divider.svg" width="100%" />
+
 <!-- ━━━━━━━━━━━━━ SPEED BANNER ━━━━━━━━━━━━━ -->
 <img src="public/banner-speed.svg" width="100%" />
 
@@ -169,6 +179,8 @@ GPS beacons in remote zones transmit erratically. RailPulse bridges gaps using *
   Memory Usage          ████ 32 MB             ██████████████████ 180MB ████████████ 220MB
   Ad Trackers           ▏ ZERO                 ██████████████████ 18+   ██████████ 8+
 ```
+
+<img src="public/track-divider.svg" width="100%" />
 
 <!-- ━━━━━━━━━━━━━ TECH BANNER ━━━━━━━━━━━━━ -->
 <img src="public/banner-tech.svg" width="100%" />
@@ -209,6 +221,8 @@ GPS beacons in remote zones transmit erratically. RailPulse bridges gaps using *
     ●                                                                                  ●
   START                                                                            DEPLOYED
 ```
+
+<img src="public/track-divider.svg" width="100%" />
 
 <!-- ━━━━━━━━━━━━━ API BANNER ━━━━━━━━━━━━━ -->
 <img src="public/banner-api.svg" width="100%" />
@@ -257,6 +271,8 @@ curl -s "https://railpulse.vercel.app/api/train/12301" | jq '.'
 | `GET /api/terrain?lat=18.9&lng=73.2` | Elevation profile (ghat sections) |
 | `GET /api/weather?lat=24.7&lng=84.9` | Station weather telemetry |
 
+<img src="public/track-divider.svg" width="100%" />
+
 <!-- ━━━━━━━━━━━━━ QUICKSTART BANNER ━━━━━━━━━━━━━ -->
 <img src="public/banner-quickstart.svg" width="100%" />
 
@@ -283,6 +299,9 @@ npm run dev
 <!-- ━━━━━━━━━━━━━ TRACK DIVIDER ━━━━━━━━━━━━━ -->
 <img src="public/track-divider.svg" width="100%" />
 
+<!-- ━━━━━━━━━━━━━ AUTHOR BANNER ━━━━━━━━━━━━━ -->
+<img src="public/banner-author.svg" width="100%" />
+
 ## 👨‍💻 The Driver's Cabin
 
 <div align="center">
@@ -301,6 +320,9 @@ npm run dev
 
 <!-- ━━━━━━━━━━━━━ TRACK DIVIDER ━━━━━━━━━━━━━ -->
 <img src="public/track-divider.svg" width="100%" />
+
+<!-- ━━━━━━━━━━━━━ DISCLAIMER BANNER ━━━━━━━━━━━━━ -->
+<img src="public/banner-disclaimer.svg" width="100%" />
 
 ## ⚠️ Disclaimer
 
