@@ -69,4 +69,5 @@ export interface LiveJourney {
   updateMessage?: string;
   stations: Station[];
   routeGeometry?: [number, number][]; // Array of [lng, lat] for MapLibre polyline
+  runDays?: string[]; // Array of '1' (runs) or '0' (doesn't run) for [Sun, Mon, Tue, Wed, Thu, Fri, Sat]
 }

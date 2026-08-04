@@ -130,15 +130,20 @@ export default function HomePage() {
           {/* ─── Search Input ─── */}
           <div className="mt-8 relative max-w-xl mx-auto text-left">
             {/* Search Mode Toggles */}
-            <div className="flex items-center justify-center gap-2 mb-4">
+            <div className="flex items-center justify-center gap-2 mb-4 flex-wrap">
               {[
                 { id: 'train', label: 'Live Train' },
                 { id: 'station', label: 'Live Station' },
+                { id: 'routes', label: 'Routes' },
                 { id: 'pnr', label: 'PNR Status' }
               ].map((mode) => (
                 <button
                   key={mode.id}
                   onClick={() => {
+                    if (mode.id === 'routes') {
+                      router.push('/between');
+                      return;
+                    }
                     setSearchMode(mode.id as any);
                     setInputValue('');
                     setIsSearchOpen(false);
@@ -401,6 +406,51 @@ export default function HomePage() {
           </div>
         </section>
       )}
+
+      {/* ─── Popular Live Routes ────────────────────────────────────────────── */}
+      <section className="space-y-4">
+        <div className="flex items-center gap-2 font-bold text-lg text-slate-900 dark:text-white">
+          <TrendingUp className="h-5 w-5 text-emerald-500" />
+          <span>Popular Live Routes</span>
+        </div>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {[
+            { num: '12301', name: 'Howrah Rajdhani', from: 'HWH', to: 'NDLS', color: 'text-rose-500', bg: 'bg-rose-500/10 hover:bg-rose-500 hover:text-white' },
+            { num: '22436', name: 'Vande Bharat Exp', from: 'NDLS', to: 'BSB', color: 'text-sky-500', bg: 'bg-sky-500/10 hover:bg-sky-500 hover:text-white' },
+            { num: '12137', name: 'Punjab Mail', from: 'CSMT', to: 'FZR', color: 'text-amber-500', bg: 'bg-amber-500/10 hover:bg-amber-500 hover:text-white' },
+            { num: '12273', name: 'Howrah Duronto', from: 'HWH', to: 'NDLS', color: 'text-emerald-500', bg: 'bg-emerald-500/10 hover:bg-emerald-500 hover:text-white' }
+          ].map((route, i) => (
+            <Link
+              key={i}
+              href={`/train/${route.num}`}
+              className="glass-panel group relative overflow-hidden rounded-2xl p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-glass-hover border border-slate-200/50 dark:border-slate-800/50"
+            >
+              <div className="absolute -right-4 -top-4 opacity-10 transition-transform duration-500 group-hover:scale-110 group-hover:opacity-20">
+                <Train className="h-24 w-24" />
+              </div>
+              <div className="relative z-10 flex flex-col h-full justify-between gap-4">
+                <div className="flex items-start justify-between">
+                  <div className={cn("flex h-8 w-8 items-center justify-center rounded-lg font-bold text-xs transition-colors", route.bg, route.color)}>
+                    <Train className="h-4 w-4" />
+                  </div>
+                  <span className="font-mono text-xs font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md">
+                    {route.num}
+                  </span>
+                </div>
+                <div>
+                  <h4 className="font-bold text-slate-900 dark:text-white text-sm truncate mb-1">{route.name}</h4>
+                  <div className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                    <span>{route.from}</span>
+                    <ArrowRight className="h-3 w-3" />
+                    <span>{route.to}</span>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
 
       {/* ─── Feature Grid ──────────────────────────────────────────────────── */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-5">

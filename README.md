@@ -64,6 +64,16 @@ It tracks live train positions, predicts delays using block-section signaling lo
 └────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
+### 🌟 Popular Live Routes to Try
+Jump straight into the telemetry dashboard with these iconic routes:
+- 🚄 **[12301 — Howrah Rajdhani Express](http://localhost:3000/train/12301)** (HWH ➔ NDLS)
+- 🚅 **[22436 — Vande Bharat Express](http://localhost:3000/train/22436)** (NDLS ➔ BSB)
+- 🚆 **[12137 — Punjab Mail](http://localhost:3000/train/12137)** (CSMT ➔ FZR)
+- 🚇 **[12273 — Howrah Duronto](http://localhost:3000/train/12273)** (HWH ➔ NDLS)
+
+<br/>
+
+
 <img src="public/track-divider.svg" width="100%" />
 
 <!-- ━━━━━━━━━━━━━ ENGINE BANNER ━━━━━━━━━━━━━ -->

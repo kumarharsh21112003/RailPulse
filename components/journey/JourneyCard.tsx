@@ -46,10 +46,30 @@ export function JourneyCard({
           <h2 className="mt-2 text-2xl font-bold text-slate-900 dark:text-white">
             {journey.name}
           </h2>
-          <div className="mt-1 flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
+          <div className="mt-1 flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 flex-wrap">
             <span>{journey.origin.name} ({journey.origin.code})</span>
             <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
             <span>{journey.destination.name} ({journey.destination.code})</span>
+
+            <div className="ml-2 pl-3 border-l border-slate-200 dark:border-slate-700 flex items-center gap-1">
+              {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => {
+                const isRunning = (journey.runDays || ['1','1','1','1','1','1','1'])[i] === '1';
+                return (
+                  <span
+                    key={i}
+                    title={isRunning ? `Runs on ${day}` : `Does not run on ${day}`}
+                    className={cn(
+                      "flex h-[18px] w-[18px] items-center justify-center rounded-full text-[9px] font-bold",
+                      isRunning
+                        ? "bg-rail-blue text-white"
+                        : "bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500"
+                    )}
+                  >
+                    {day}
+                  </span>
+                );
+              })}
+            </div>
           </div>
         </div>
 
