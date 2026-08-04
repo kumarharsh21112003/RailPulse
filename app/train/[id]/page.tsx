@@ -59,28 +59,13 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; dot: string 
 
 export default function TrainJourneyPage({ params }: { params: { id: string } }) {
   const trainId = params.id;
-  const [selectedDate, setSelectedDate] = useState<string>('');
-  const { data: journey, isLoading, isError, error, refetch, isRefetching } = useLiveJourney(trainId, selectedDate || undefined);
+  const today = new Date();
+  const [selectedDate, setSelectedDate] = useState<string>(format(today, 'yyyy-MM-dd'));
+  const { data: journey, isLoading, isError, error, refetch, isRefetching } = useLiveJourney(trainId, selectedDate);
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState<TabId>('map');
 
-  // Sync the dropdown with the actual journey start date when "Currently Active" is selected
-  useEffect(() => {
-    if (selectedDate === '' && journey?.startDate) {
-      // journey.startDate is like '03-Aug-2026'
-      try {
-        const parsed = parse(journey.startDate, 'dd-MMM-yyyy', new Date());
-        const formatted = format(parsed, 'yyyy-MM-dd');
-        setSelectedDate(formatted);
-      } catch (e) {
-        // ignore parsing errors
-      }
-    }
-  }, [selectedDate, journey?.startDate]);
-
-  const today = new Date();
   const dateOptions = [
-    ...(selectedDate === '' ? [{ label: 'Active Journey', value: '' }] : []),
     { label: 'Today', value: format(today, 'yyyy-MM-dd') },
     { label: 'Yesterday', value: format(subDays(today, 1), 'yyyy-MM-dd') },
     { label: '2 Days Ago', value: format(subDays(today, 2), 'yyyy-MM-dd') },
