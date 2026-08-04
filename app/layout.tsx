@@ -4,6 +4,7 @@ import '@/styles/globals.css';
 import QueryProvider from '@/providers/query-provider';
 import { Navbar } from '@/components/layout/Navbar';
 import { BottomNav } from '@/components/layout/BottomNav';
+import Script from 'next/script';
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' });
 
@@ -49,6 +50,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://api.railradar.in" />
         <link rel="preconnect" href="https://api.maptiler.com" />
         <link rel="preconnect" href="https://api.openweathermap.org" />
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2898236477566874"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
       </head>
       <body
         className={`${inter.className} min-h-full flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100`}
