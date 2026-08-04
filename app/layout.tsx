@@ -11,7 +11,12 @@ export const metadata: Metadata = {
   title: 'RailPulse — Live Indian Train Tracker',
   description:
     'Experience train tracking redefined. Real-time Indian Railways tracking with interactive vector maps, delay analytics, weather intelligence, and terrain insights.',
-  keywords: ['train tracking', 'RailPulse', 'live train status', 'Indian Railways', 'train map', 'IRCTC train'],
+  keywords: [
+    'train tracking', 'RailPulse', 'live train status', 'Indian Railways', 'train map', 'IRCTC train', 
+    'spot your train', 'ntes live status', 'where is my train', 'train running status', 
+    'live station departures', 'train delay status', 'exact train location map', 
+    'PNR status', 'seat availability'
+  ],
   authors: [{ name: 'Kumar Harsh' }],
   manifest: '/manifest.json',
   appleWebApp: {
