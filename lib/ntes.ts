@@ -165,37 +165,10 @@ export async function fetchNtesLiveStatus(trainNumber: string, date?: string): P
   // If the train hasn't started yet (TRUNST === 0) or STNS is empty
   if (data.TRUNST === 0 || !data.STNS || data.STNS.length === 0) {
     if (data.TRUNST === 0) {
-      return {
-        trainId: trainNumber,
-        number: data.TN || trainNumber,
-        name: data.TNM || 'Unknown Train',
-        origin: { code: data.SRC || '', name: data.SRCN || data.SRC || '' },
-        destination: { code: data.DSTN || '', name: data.DSTNN || data.DSTN || '' },
-        currentLocation: { lat: 0, lng: 0, speedKmh: 0, isMoving: false, heading: 0 },
-        status: 'not_started',
-        delayMinutes: 0,
-        speedKmh: 0,
-        distanceCoveredKm: 0,
-        remainingDistanceKm: data.TTLDIST || 0,
-        totalDistanceKm: data.TTLDIST || 0,
-        completionPercentage: 0,
-        lastUpdated: new Date().toISOString(),
-        startDate: data.STD,
-        ETA: 'Yet to start',
-        stations: [
-          {
-            code: data.SRC || '',
-            name: data.SRCN || data.SRC || '',
-            lat: 0,
-            lng: 0,
-            scheduledArrival: '--:--',
-            scheduledDeparture: '--:--',
-            distanceKm: 0,
-            delayMinutes: 0,
-            status: 'upcoming'
-          }
-        ]
-      };
+      // Throwing here allows ConfirmTkt or generateFallbackJourney to take over
+      // Both of those alternatives provide the FULL scheduled route (30+ stations),
+      // whereas NTES provides 0 stations for unstarted trains.
+      throw new Error('Train not started yet - yielding to fallback for full schedule');
     }
     return null;
   }
