@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Share2, Check, MapPin, CloudSun, Mountain, AlertCircle, Calendar } from 'lucide-react';
+import { ArrowLeft, Share2, Check, MapPin, CloudSun, Mountain, AlertCircle, Calendar, ChevronDown } from 'lucide-react';
 import { format, subDays, parse } from 'date-fns';
 import { useLiveJourney } from '@/hooks/useLiveJourney';
 import { JourneyCard } from '@/components/journey/JourneyCard';
@@ -80,7 +80,7 @@ export default function TrainJourneyPage({ params }: { params: { id: string } })
 
   const today = new Date();
   const dateOptions = [
-    ...(selectedDate === '' ? [{ label: 'Tracking...', value: '' }] : []),
+    ...(selectedDate === '' ? [{ label: 'Active Journey', value: '' }] : []),
     { label: 'Today', value: format(today, 'yyyy-MM-dd') },
     { label: 'Yesterday', value: format(subDays(today, 1), 'yyyy-MM-dd') },
     { label: '2 Days Ago', value: format(subDays(today, 2), 'yyyy-MM-dd') },
@@ -206,11 +206,11 @@ export default function TrainJourneyPage({ params }: { params: { id: string } })
 
           {/* Date Selector */}
           <div className="relative flex items-center bg-slate-200/60 dark:bg-slate-800/60 rounded-xl hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">
-            <Calendar className="absolute left-3 h-4 w-4 text-slate-500" />
+            <Calendar className="absolute left-3 h-4 w-4 text-slate-500 pointer-events-none" />
             <select
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
-              className="appearance-none bg-transparent pl-9 pr-8 py-2 text-xs font-semibold text-slate-700 dark:text-slate-200 outline-none cursor-pointer"
+              className="appearance-none bg-transparent pl-9 pr-9 py-2 text-xs font-semibold text-slate-700 dark:text-slate-200 outline-none cursor-pointer w-full"
             >
               {dateOptions.map((opt) => (
                 <option key={opt.label} value={opt.value} className="bg-white dark:bg-slate-900">
@@ -218,6 +218,7 @@ export default function TrainJourneyPage({ params }: { params: { id: string } })
                 </option>
               ))}
             </select>
+            <ChevronDown className="absolute right-3 h-4 w-4 text-slate-500 pointer-events-none" />
           </div>
 
           {/* Favorite */}
