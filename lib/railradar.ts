@@ -434,14 +434,19 @@ export async function getLiveJourney(trainNumber: string, date?: string): Promis
     })
   );
 
-  // Add ConfirmTkt promise as a reliable fallback/racer even for past dates, 
-  // because NTES frequently fails on Vercel and ConfirmTkt tracks the currently active run.
-  promises.push(
-    fetchConfirmTktLiveStatus(trainNumber, date).then((data) => {
-      if (!data) throw new Error('ConfirmTkt returned null');
-      return data;
-    })
-  );
+  // ConfirmTkt only reliably tracks the current active run.
+  // If we pass a past date, it still returns the active run, which might be 'not_started'.
+  // This causes ConfirmTkt to win the race with wrong data.
+  // So we ONLY use ConfirmTkt for active/today queries.
+  const isToday = date === new Intl.DateTimeFormat('en-CA').format(new Date()); // 'yyyy-MM-dd'
+  if (!date || isToday) {
+    promises.push(
+      fetchConfirmTktLiveStatus(trainNumber, date).then((data) => {
+        if (!data) throw new Error('ConfirmTkt returned null');
+        return data;
+      })
+    );
+  }
 
   try {
     // Promise.any returns the FIRST successful resolution! Lightning fast.
