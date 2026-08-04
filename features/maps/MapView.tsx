@@ -68,14 +68,14 @@ export default function MapView({ journey, className }: MapViewProps) {
       : {
           version: 8 as const,
           sources: {
-            'carto-dark': {
+            'carto': {
               type: 'raster' as const,
-              tiles: ['https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'],
+              tiles: [`https://a.basemaps.cartocdn.com/${isDarkMode ? 'dark_all' : 'light_all'}/{z}/{x}/{y}.png`],
               tileSize: 256,
               attribution: '© OpenStreetMap © CARTO',
             },
           },
-          layers: [{ id: 'carto-layer', type: 'raster' as const, source: 'carto-dark' }],
+          layers: [{ id: 'carto-layer', type: 'raster' as const, source: 'carto' }],
         };
 
     const center: [number, number] = [
