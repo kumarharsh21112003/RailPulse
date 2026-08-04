@@ -311,7 +311,7 @@ async function geocodeStation(name: string, defaultLat: number, defaultLng: numb
   return [defaultLat, defaultLng];
 }
 
-async function generateFallbackJourney(trainNumber: string): Promise<LiveJourney | null> {
+async function generateFallbackJourney(trainNumber: string, date?: string): Promise<LiveJourney | null> {
   const localInfo = searchLocalTrains(trainNumber)[0];
   
   const originName = localInfo?.from || 'Mumbai Central';
@@ -362,6 +362,11 @@ async function generateFallbackJourney(trainNumber: string): Promise<LiveJourney
 
   const simulatedSpeed = Math.floor(Math.random() * (115 - 75 + 1)) + 75; 
 
+  let startDateStr = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date()).replace(/ /g, '-');
+  if (date && date.match(/^\d{4}-\d{2}-\d{2}$/)) {
+    startDateStr = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(date)).replace(/ /g, '-');
+  }
+
   return {
     trainId: trainNumber,
     number: trainNumber,
@@ -383,7 +388,7 @@ async function generateFallbackJourney(trainNumber: string): Promise<LiveJourney
     totalDistanceKm: 1384,
     completionPercentage: 66.5,
     lastUpdated: new Date().toISOString(),
-    startDate: new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date()).replace(/ /g, '-'),
+    startDate: startDateStr,
     ETA: `${stations[1].name} at 08:32`,
     previousStation: stations[0],
     currentStation: stations[0],
@@ -429,15 +434,14 @@ export async function getLiveJourney(trainNumber: string, date?: string): Promis
     })
   );
 
-  // Add ConfirmTkt promise (only if no specific date is requested, as ConfirmTkt only returns live active run)
-  if (!date) {
-    promises.push(
-      fetchConfirmTktLiveStatus(trainNumber, date).then((data) => {
-        if (!data) throw new Error('ConfirmTkt returned null');
-        return data;
-      })
-    );
-  }
+  // Add ConfirmTkt promise as a reliable fallback/racer even for past dates, 
+  // because NTES frequently fails on Vercel and ConfirmTkt tracks the currently active run.
+  promises.push(
+    fetchConfirmTktLiveStatus(trainNumber, date).then((data) => {
+      if (!data) throw new Error('ConfirmTkt returned null');
+      return data;
+    })
+  );
 
   try {
     // Promise.any returns the FIRST successful resolution! Lightning fast.
@@ -453,7 +457,7 @@ export async function getLiveJourney(trainNumber: string, date?: string): Promis
   // If real APIs are blocked or network is too slow, we immediately return the estimated fallback data
   // so the user never sees a blank screen or error.
   console.log(`[getLiveJourney] Falling back to Estimated Journey Simulator for train ${trainNumber}`);
-  const fallbackData = await generateFallbackJourney(trainNumber);
+  const fallbackData = await generateFallbackJourney(trainNumber, date);
   
   if (fallbackData) {
     // Flag it so the UI could technically know it's estimated
