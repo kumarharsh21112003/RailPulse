@@ -488,6 +488,48 @@ export default function HomePage() {
             <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">{f.desc}</p>
           </motion.div>
         ))}
+      {/* ─── SEO Content & Internal Links (Footer) ─────────────────────────── */}
+      <section className="mt-16 border-t border-slate-200 dark:border-slate-800 pt-10 pb-8 text-sm">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div>
+            <h4 className="font-bold text-slate-900 dark:text-white mb-4">Top Searched Trains</h4>
+            <ul className="space-y-2 text-slate-500 dark:text-slate-400">
+              <li><Link href="/train/12951" className="hover:text-rail-blue transition-colors">12951 - Mumbai Rajdhani</Link></li>
+              <li><Link href="/train/12301" className="hover:text-rail-blue transition-colors">12301 - Howrah Rajdhani</Link></li>
+              <li><Link href="/train/22436" className="hover:text-rail-blue transition-colors">22436 - Vande Bharat Express</Link></li>
+              <li><Link href="/train/12621" className="hover:text-rail-blue transition-colors">12621 - Tamil Nadu Exp</Link></li>
+              <li><Link href="/train/12004" className="hover:text-rail-blue transition-colors">12004 - LJN NDLS Shatabdi</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold text-slate-900 dark:text-white mb-4">Popular Live Stations</h4>
+            <ul className="space-y-2 text-slate-500 dark:text-slate-400">
+              <li><Link href="/station/NDLS" className="hover:text-rail-blue transition-colors">NDLS - New Delhi Live Status</Link></li>
+              <li><Link href="/station/HWH" className="hover:text-rail-blue transition-colors">HWH - Howrah Jn Departures</Link></li>
+              <li><Link href="/station/CSMT" className="hover:text-rail-blue transition-colors">CSMT - Mumbai CSMT Trains</Link></li>
+              <li><Link href="/station/SBC" className="hover:text-rail-blue transition-colors">SBC - KSR Bengaluru Status</Link></li>
+              <li><Link href="/station/PNBE" className="hover:text-rail-blue transition-colors">PNBE - Patna Jn Live</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold text-slate-900 dark:text-white mb-4">RailPulse Tools</h4>
+            <ul className="space-y-2 text-slate-500 dark:text-slate-400">
+              <li><Link href="/" className="hover:text-rail-blue transition-colors">Live Train Running Status</Link></li>
+              <li><Link href="/between" className="hover:text-rail-blue transition-colors">Trains Between Stations</Link></li>
+              <li><Link href="/" className="hover:text-rail-blue transition-colors">Spot Your Train (NTES)</Link></li>
+              <li><Link href="/" className="hover:text-rail-blue transition-colors">PNR Status Check</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold text-slate-900 dark:text-white mb-4">About Live Tracking</h4>
+            <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-4">
+              RailPulse provides the fastest and most accurate <strong>Live Train Running Status</strong> in India. Using advanced GPS and NTES data, you can spot your train, check delays, and view real-time arrival/departure timings for all Indian Railways trains.
+            </p>
+          </div>
+        </div>
+        <div className="mt-10 text-center text-xs text-slate-400 border-t border-slate-200/50 dark:border-slate-800/50 pt-6">
+          © {new Date().getFullYear()} RailPulse - Indian Railways Live Tracking. Not affiliated with IRCTC or NTES.
+        </div>
       </section>
     </div>
   );
