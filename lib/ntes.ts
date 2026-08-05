@@ -364,7 +364,7 @@ function addMinutesToTime(timeStr: string | undefined, mins: number): string | u
       
       if (!timeStr && targetForEta.scheduledArrival && targetForEta.scheduledArrival !== '--:--') {
         const delayToUse = targetForEta.delayMinutes > 0 ? targetForEta.delayMinutes : currentOverallDelay;
-        timeStr = addMinutesToTime(targetForEta.scheduledArrival, delayToUse);
+        timeStr = addMinutesToTime(targetForEta.scheduledArrival, delayToUse) || null;
       }
 
       if (timeStr) {
