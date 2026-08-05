@@ -46,12 +46,12 @@ export function PassingStationsAccordion({ from, to }: { from: Station; to: Stat
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 text-xs font-semibold text-slate-500 hover:text-rail-blue transition-colors"
       >
-        <span>{isOpen ? 'Hide' : 'View'} Passing Stations</span>
+        <span>{isOpen ? 'Hide' : 'View'} Passing Stations {stations.length > 0 && `(${stations.length})`}</span>
         <ChevronDown className={cn("h-4 w-4 transition-transform", isOpen && "rotate-180")} />
       </button>
 
       {isOpen && (
-        <div className="mt-3 flex flex-col gap-3">
+        <div className="mt-3 flex flex-col gap-3 max-h-64 overflow-y-auto pr-2 custom-scrollbar">
           {loading && (
             <div className="text-xs text-slate-400 animate-pulse">Calculating shortest path...</div>
           )}
@@ -63,8 +63,8 @@ export function PassingStationsAccordion({ from, to }: { from: Station; to: Stat
           )}
           {!loading && !error && stations.length > 0 && stations.map((s, idx) => (
             <div key={idx} className="flex items-center gap-3">
-              <MapPin className="h-3 w-3 text-slate-400" />
-              <span className="text-xs text-slate-600 dark:text-slate-400 font-medium">
+              <MapPin className="h-3 w-3 text-slate-400 shrink-0" />
+              <span className="text-xs text-slate-600 dark:text-slate-400 font-medium truncate">
                 {s.name} {s.ref && !s.ref.includes(':') ? `(${s.ref})` : ''}
               </span>
             </div>

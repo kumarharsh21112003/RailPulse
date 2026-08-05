@@ -36,7 +36,7 @@ class WayHandler(osmium.SimpleHandler):
             self.station_nodes[n.id] = {'ref': ref, 'name': name, 'lon': lon, 'lat': lat}
 
     def way(self, w):
-        if 'railway' in w.tags and w.tags['railway'] in ('rail', 'narrow_gauge', 'light_rail'):
+        if 'railway' in w.tags and w.tags['railway'] == 'rail':
             nodes = [n.ref for n in w.nodes]
             self.ways.append(nodes)
             for n in nodes:
