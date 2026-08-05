@@ -190,7 +190,7 @@ export default function MapView({ journey, className }: MapViewProps) {
           <div class="font-bold text-xs">${journey.name}</div>
           <div class="text-[11px] text-gray-500">#${journey.number}</div>
           <div class="text-[11px] font-semibold text-sky-600 mt-0.5">
-            ${journey.speedKmh} km/h · Delay: ${journey.delayMinutes > 0 ? '+' + journey.delayMinutes + 'm' : 'On time'}
+            Delay: ${journey.delayMinutes > 0 ? '+' + journey.delayMinutes + 'm' : 'On time'}
           </div>
         </div>`);
 

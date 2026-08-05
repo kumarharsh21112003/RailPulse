@@ -78,7 +78,6 @@ export function MobileJourneySummary({ journey }: MobileJourneySummaryProps) {
       {/* Live stats row */}
       <div className="flex items-center gap-3">
         {[
-          { icon: Gauge, value: `${journey.speedKmh} km/h`, label: 'Speed' },
           { icon: Activity, value: `${journey.distanceCoveredKm} km`, label: 'Covered' },
           { icon: Clock, value: journey.ETA, label: 'ETA' },
         ].map(({ icon: Icon, value, label }) => (
