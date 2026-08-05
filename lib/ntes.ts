@@ -364,6 +364,7 @@ function addMinutesToTime(timeStr: string | undefined, mins: number): string | u
     }
 
     const speed = getRealisticSpeed(data.trainName || '', isMoving);
+    let etaStr = '';
     // Prefer the next stopping station for ETA
     const nextStoppingStation = stations.find(s => s.status === 'upcoming' && (s.scheduledArrival !== '--:--' || s.scheduledDeparture !== '--:--'));
     const targetForEta = nextStoppingStation || nextStation || destination;
