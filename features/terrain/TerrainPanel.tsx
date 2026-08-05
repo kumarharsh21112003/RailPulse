@@ -21,7 +21,11 @@ export function TerrainPanel({ trainId, currentLocation }: TerrainPanelProps) {
       setLoading(true);
       setError(false);
       try {
-        const res = await fetch(`/api/terrain?trainId=${trainId}`);
+        let url = `/api/terrain?trainId=${trainId}`;
+        if (currentLocation?.lat && currentLocation?.lng) {
+          url += `&lat=${currentLocation.lat}&lng=${currentLocation.lng}`;
+        }
+        const res = await fetch(url);
         const json = await res.json();
         if (json.success && json.data) {
           setFeatures(json.data);

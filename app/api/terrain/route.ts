@@ -36,14 +36,17 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const journey = await getLiveJourney(trainId);
-    if (!journey) {
-      return NextResponse.json<ApiResponse<TerrainFeature[]>>({
-        success: true,
-        data: [],
-        cached: false,
-        timestamp: new Date().toISOString(),
-      });
+    let journey = null;
+    if (trainId && (!latParam || !lngParam)) {
+      journey = await getLiveJourney(trainId);
+      if (!journey) {
+        return NextResponse.json<ApiResponse<TerrainFeature[]>>({
+          success: true,
+          data: [],
+          cached: false,
+          timestamp: new Date().toISOString(),
+        });
+      }
     }
 
     let routeCoords: [number, number][] = [];
@@ -65,7 +68,7 @@ export async function GET(request: NextRequest) {
     const features = await getTerrainFeatures(routeCoords);
 
     // Compute rough distance from first station for each feature
-    const origin = journey.stations[0];
+    const origin = journey?.stations[0];
     if (origin?.lat && origin?.lng) {
       features.forEach((f) => {
         const dlat = f.lat - origin.lat;

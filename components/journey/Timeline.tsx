@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
-import { CheckCircle2, Circle, Radio, Clock } from 'lucide-react';
+import { CheckCircle2, Circle, Radio } from 'lucide-react';
 import { Station } from '@/types/train';
+import { PassingStationsAccordion } from './PassingStationsAccordion';
 import { formatDelay } from '@/utils/format';
 import { cn } from '@/utils/cn';
 
@@ -54,7 +55,8 @@ export function Timeline({ stations, currentStationCode, className }: TimelinePr
               : ((st.actualDeparture && st.actualDeparture !== '--:--' && st.actualDeparture !== '**UA**') ? st.actualDeparture : null);
 
             return (
-              <div key={st.code + idx} className="relative flex items-start justify-between gap-4">
+            <React.Fragment key={st.code + idx}>
+              <div className="relative flex items-start justify-between gap-4">
                 {/* Custom Timeline Dot Marker */}
                 <div className="absolute -left-6 top-0.5 flex h-6 w-6 -translate-x-1/2 items-center justify-center rounded-full bg-background">
                   {isPassed && (
@@ -132,8 +134,14 @@ export function Timeline({ stations, currentStationCode, className }: TimelinePr
                   )}
                 </div>
               </div>
-            );
-          })}
+              
+              {/* Insert Passing Stations Accordion between this station and the next */}
+              {idx < stations.length - 1 && (
+                <PassingStationsAccordion from={st} to={stations[idx + 1]} />
+              )}
+            </React.Fragment>
+          );
+        })}
         </div>
       </div>
     </div>
