@@ -101,7 +101,7 @@ export function Timeline({ stations, currentStationCode, className }: TimelinePr
                 {/* Schedule vs Actual Timing */}
                 <div className="text-right font-mono flex flex-col items-end gap-0.5">
                   {st.delayMinutes > 0 && st.scheduledArrival && st.scheduledArrival !== '--:--' && st.scheduledArrival !== '**UA**' && (
-                    <div className="text-[11px] text-slate-400 line-through font-medium">
+                    <div className="text-[11px] text-slate-400 font-medium">
                       {st.scheduledArrival}
                     </div>
                   )}
