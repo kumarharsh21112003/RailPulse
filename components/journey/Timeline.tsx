@@ -6,6 +6,24 @@ import { Station } from '@/types/train';
 import { formatDelay } from '@/utils/format';
 import { cn } from '@/utils/cn';
 
+function calculateExpectedTime(scheduled: string | undefined, delayMins: number): string {
+  if (!scheduled || scheduled === '--:--' || scheduled === '**UA**') return scheduled || '--:--';
+  if (!delayMins || delayMins <= 0) return scheduled;
+  
+  const parts = scheduled.split(':');
+  if (parts.length !== 2) return scheduled;
+  let h = parseInt(parts[0], 10);
+  let m = parseInt(parts[1], 10);
+  if (isNaN(h) || isNaN(m)) return scheduled;
+  
+  m += delayMins;
+  h += Math.floor(m / 60);
+  m = m % 60;
+  h = (h % 24 + 24) % 24;
+  
+  return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+}
+
 interface TimelineProps {
   stations: Station[];
   currentStationCode?: string;
@@ -81,16 +99,26 @@ export function Timeline({ stations, currentStationCode, className }: TimelinePr
                 </div>
 
                 {/* Schedule vs Actual Timing */}
-                <div className="text-right font-mono text-xs">
-                  <div className="font-semibold text-slate-800 dark:text-slate-200">
-                    {st.actualArrival || st.scheduledArrival}
+                <div className="text-right font-mono flex flex-col items-end gap-0.5">
+                  {st.delayMinutes > 0 && st.scheduledArrival && st.scheduledArrival !== '--:--' && st.scheduledArrival !== '**UA**' && (
+                    <div className="text-[11px] text-slate-400 line-through font-medium">
+                      {st.scheduledArrival}
+                    </div>
+                  )}
+                  <div className={cn(
+                    "font-bold text-sm",
+                    st.delayMinutes > 0 ? "text-amber-600 dark:text-amber-500" : "text-slate-800 dark:text-slate-200"
+                  )}>
+                    {(st.actualArrival && st.actualArrival !== '--:--' && st.actualArrival !== '**UA**')
+                      ? st.actualArrival 
+                      : calculateExpectedTime(st.scheduledArrival, st.delayMinutes)}
                   </div>
                   {st.delayMinutes > 0 ? (
-                    <div className={cn('text-[11px] font-bold', delayInfo.color)}>
+                    <div className={cn('text-[10px] font-bold', delayInfo.color)}>
                       +{st.delayMinutes}m delay
                     </div>
                   ) : (
-                    <div className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">
+                    <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">
                       On Time
                     </div>
                   )}
