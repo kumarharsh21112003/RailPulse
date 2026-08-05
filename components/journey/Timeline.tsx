@@ -3,7 +3,6 @@
 import React from 'react';
 import { CheckCircle2, Circle, Radio } from 'lucide-react';
 import { Station } from '@/types/train';
-import { PassingStationsAccordion } from './PassingStationsAccordion';
 import { formatDelay } from '@/utils/format';
 import { cn } from '@/utils/cn';
 
@@ -135,11 +134,6 @@ export function Timeline({ stations, currentStationCode, className, distanceCove
                   )}
                 </div>
               </div>
-              
-              {/* Insert Passing Stations Accordion between this station and the next */}
-              {idx < stations.length - 1 && (
-                <PassingStationsAccordion from={st} to={stations[idx + 1]} distanceCoveredKm={distanceCoveredKm} />
-              )}
             </React.Fragment>
           );
         })}
