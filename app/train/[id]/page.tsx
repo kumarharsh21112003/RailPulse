@@ -272,7 +272,7 @@ export default function TrainJourneyPage({ params }: { params: { id: string } })
           {activeTab === 'analytics' && (
             <>
               <AnalyticsDashboard journey={journey} />
-              <TerrainPanel trainId={journey.trainId} />
+              <TerrainPanel trainId={journey.trainId} currentLocation={journey.currentLocation} />
             </>
           )}
         </div>

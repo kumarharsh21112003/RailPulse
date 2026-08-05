@@ -7,9 +7,10 @@ import { TerrainCard } from './TerrainCard';
 
 interface TerrainPanelProps {
   trainId: string;
+  currentLocation?: { lat: number; lng: number };
 }
 
-export function TerrainPanel({ trainId }: TerrainPanelProps) {
+export function TerrainPanel({ trainId, currentLocation }: TerrainPanelProps) {
   const [features, setFeatures] = useState<TerrainFeature[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -35,6 +36,23 @@ export function TerrainPanel({ trainId }: TerrainPanelProps) {
     }
     load();
   }, [trainId]);
+
+  const displayFeatures = React.useMemo(() => {
+    if (!features.length) return [];
+    if (!currentLocation || !currentLocation.lat || !currentLocation.lng) return features;
+
+    // Calculate distance from current location
+    const withDistance = features.map(f => {
+      const dlat = f.lat - currentLocation.lat;
+      const dlng = f.lng - currentLocation.lng;
+      const distFromCurrent = Math.round(Math.sqrt(dlat * dlat + dlng * dlng) * 111);
+      return { ...f, distFromCurrent };
+    });
+
+    // Sort by proximity to current location
+    withDistance.sort((a, b) => (a.distFromCurrent || 0) - (b.distFromCurrent || 0));
+    return withDistance;
+  }, [features, currentLocation]);
 
   return (
     <div className="space-y-4">
@@ -64,14 +82,14 @@ export function TerrainPanel({ trainId }: TerrainPanelProps) {
         </div>
       )}
 
-      {!loading && features.length > 0 && (
+      {!loading && displayFeatures.length > 0 && (
         <div
           ref={scrollRef}
           className="flex gap-3 overflow-x-auto pb-3"
           style={{ scrollbarWidth: 'thin' }}
         >
-          {features.map((f, i) => (
-            <TerrainCard key={`${f.type}-${f.name}-${i}`} feature={f} />
+          {displayFeatures.map((f, i) => (
+            <TerrainCard key={`${f.type}-${f.name}-${i}`} feature={f} distFromCurrent={(f as any).distFromCurrent} />
           ))}
         </div>
       )}

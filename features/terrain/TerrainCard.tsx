@@ -4,6 +4,7 @@ import { cn } from '@/utils/cn';
 
 interface TerrainCardProps {
   feature: TerrainFeature;
+  distFromCurrent?: number;
 }
 
 const TYPE_CONFIG = {
@@ -15,7 +16,7 @@ const TYPE_CONFIG = {
   city: { emoji: '🏙️', label: 'City', color: 'bg-rose-500/10 text-rose-600 border-rose-500/20' },
 };
 
-export function TerrainCard({ feature }: TerrainCardProps) {
+export function TerrainCard({ feature, distFromCurrent }: TerrainCardProps) {
   const cfg = TYPE_CONFIG[feature.type] || TYPE_CONFIG.tourist;
 
   return (
@@ -28,11 +29,15 @@ export function TerrainCard({ feature }: TerrainCardProps) {
         <p className="mt-1.5 text-sm font-bold text-slate-900 dark:text-white leading-tight line-clamp-2">
           {feature.name}
         </p>
-        {feature.distanceKm !== undefined && (
+        {distFromCurrent !== undefined ? (
+          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+            ~{distFromCurrent} km away
+          </p>
+        ) : feature.distanceKm !== undefined ? (
           <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
             ~{feature.distanceKm} km from origin
           </p>
-        )}
+        ) : null}
       </div>
     </div>
   );
