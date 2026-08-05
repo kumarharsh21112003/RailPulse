@@ -285,6 +285,50 @@ export default function TrainJourneyPage({ params }: { params: { id: string } })
           />
         </div>
       </div>
+      {/* ─── Advanced On-Page SEO (Paragraph & FAQs) ─── */}
+      <div className="mt-12 mb-8 border-t border-slate-200 dark:border-slate-800 pt-10">
+        <div className="max-w-4xl space-y-8">
+          
+          {/* SEO Paragraph */}
+          <section className="space-y-3">
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+              About {journey.number} {journey.name} Live Running Status
+            </h2>
+            <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              The <strong>{journey.number} {journey.name}</strong> is a key train operated by Indian Railways, running from <strong>{journey.origin.name} ({journey.origin.code})</strong> to <strong>{journey.destination.name} ({journey.destination.code})</strong>. 
+              It covers a total distance of approximately <strong>{journey.totalDistanceKm} km</strong>. 
+              Using RailPulse's advanced GPS tracking and NTES data integration, you can check the exact real-time live location, current delay status, and upcoming station ETAs for {journey.number}. 
+              Our live map provides pinpoint accuracy for where is my train, ensuring you never miss your journey.
+            </p>
+          </section>
+
+          {/* FAQ Section */}
+          <section className="space-y-4">
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white">Frequently Asked Questions</h2>
+            
+            <div className="space-y-4">
+              <div className="glass-panel p-4 rounded-2xl">
+                <h3 className="font-bold text-slate-900 dark:text-white text-sm mb-2">
+                  How to check the live running status of {journey.number} {journey.name}?
+                </h3>
+                <p className="text-sm text-slate-600 dark:text-slate-400">
+                  You can check the real-time live running status of {journey.number} {journey.name} directly on this RailPulse page. We provide the exact current location, delay minutes, and next station ETA using NTES data.
+                </p>
+              </div>
+              
+              <div className="glass-panel p-4 rounded-2xl">
+                <h3 className="font-bold text-slate-900 dark:text-white text-sm mb-2">
+                  What is the route of {journey.number} {journey.name}?
+                </h3>
+                <p className="text-sm text-slate-600 dark:text-slate-400">
+                  Train {journey.number} {journey.name} runs from {journey.origin.name} to {journey.destination.name}. You can view the full interactive route map, station timings, and platform numbers on this page.
+                </p>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </div>
     </div>
   );
 }

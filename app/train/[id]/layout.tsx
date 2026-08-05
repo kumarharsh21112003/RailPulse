@@ -34,6 +34,9 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
       `train ${train.number} map`,
       `${train.from} to ${train.to} train`
     ],
+    alternates: {
+      canonical: `https://railpulse.co.in/train/${params.id}`
+    },
     openGraph: {
       title,
       description,
@@ -80,12 +83,41 @@ export default function TrainLayout({ children, params }: LayoutProps) {
     }
   } : null;
 
+  const faqJsonLd = train ? {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": `How to check live running status of ${train.number} ${train.name}?`,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": `You can check the real-time live running status of ${train.number} ${train.name} on RailPulse. The GPS tracking shows the exact current location, delay, and next station ETA.`
+        }
+      },
+      {
+        "@type": "Question",
+        "name": `What is the route of ${train.number} ${train.name}?`,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": `Train ${train.number} ${train.name} runs from ${train.from} to ${train.to}. You can view the full interactive route map and station timings on this page.`
+        }
+      }
+    ]
+  } : null;
+
   return (
     <>
       {jsonLd && (
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      )}
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
         />
       )}
       {children}
