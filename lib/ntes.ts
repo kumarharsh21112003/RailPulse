@@ -240,7 +240,7 @@ function addMinutesToTime(timeStr: string | undefined, mins: number): string | u
     const insertIdx = stations.findIndex(s => s.distanceKm > dist);
     const syntheticLSTN: Station = {
       code: data.LSTN,
-      name: data.LSTNNH || data.LSTNN || data.LSTN,
+      name: data.LSTNN || data.LSTNNH || data.LSTN,
       lat: coords ? coords[1] : 0,
       lng: coords ? coords[0] : 0,
       scheduledArrival: '--:--',
@@ -271,7 +271,7 @@ function addMinutesToTime(timeStr: string | undefined, mins: number): string | u
     const insertIdx = stations.findIndex(s => s.distanceKm > dist);
     const syntheticNSTN: Station = {
       code: data.NSTN,
-      name: data.NSTNNH || data.NSTNN || data.NSTN,
+      name: data.NSTNN || data.NSTNNH || data.NSTN,
       lat: coords ? coords[1] : 0,
       lng: coords ? coords[0] : 0,
       scheduledArrival: '--:--',
@@ -369,11 +369,13 @@ function addMinutesToTime(timeStr: string | undefined, mins: number): string | u
         const currentSpeed = speed > 0 ? speed : 75; // Use simulated speed or default
         const minutesNeeded = Math.round((distRemaining / currentSpeed) * 60);
         
-        // Add minutes to current device time
+        // Convert current time to IST and add minutes
         const now = new Date();
-        now.setMinutes(now.getMinutes() + minutesNeeded);
+        const utcMs = now.getTime() + (now.getTimezoneOffset() * 60000);
+        const istMs = utcMs + (330 * 60000); // IST is UTC+5:30
+        const futureIstDate = new Date(istMs + (minutesNeeded * 60000));
         
-        const calcTimeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+        const calcTimeStr = `${futureIstDate.getHours().toString().padStart(2, '0')}:${futureIstDate.getMinutes().toString().padStart(2, '0')}`;
         etaStr = `${targetForEta.name} at ${calcTimeStr}`;
       }
     } else {
