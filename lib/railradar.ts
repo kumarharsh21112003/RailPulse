@@ -237,13 +237,28 @@ function normaliseLiveResponse(raw: RRLiveResponse, routeGeo?: [number, number][
     }
   }
 
+  function getRealisticSpeed(name: string, isMovingTrain: boolean) {
+    if (!isMovingTrain) return 0;
+    let baseSpeed = 65;
+    const nameUpper = (name || '').toUpperCase();
+    if (nameUpper.includes('VANDE BHARAT')) {
+      baseSpeed = 110;
+    } else if (nameUpper.includes('RAJDHANI') || nameUpper.includes('SHATABDI') || nameUpper.includes('DURONTO') || nameUpper.includes('TEJAS')) {
+      baseSpeed = 95;
+    } else if (nameUpper.includes('SUPERFAST') || nameUpper.includes('SF')) {
+      baseSpeed = 75;
+    } else if (nameUpper.includes('MEMU') || nameUpper.includes('DEMU') || nameUpper.includes('PASSENGER') || nameUpper.includes('LOCAL')) {
+      baseSpeed = 40;
+    }
+    const fluctuation = (new Date().getMinutes() % 11) - 5; 
+    return Math.max(0, baseSpeed + fluctuation);
+  }
+
   const currentLocation: LiveJourney['currentLocation'] = {
     lat: trainLat,
     lng: trainLng,
     heading: 45,
-    speedKmh: raw.status === 'running' 
-      ? Math.round(train.avgSpeed || 80) 
-      : 0,
+    speedKmh: getRealisticSpeed(raw.trainName, raw.status === 'running'),
     isMoving: raw.status === 'running',
   };
 

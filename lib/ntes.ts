@@ -346,13 +346,24 @@ function addMinutesToTime(timeStr: string | undefined, mins: number): string | u
       isMoving = true;
     }
 
-    let speed = 0;
-    if (isMoving) {
-      // Create a deterministic but dynamically shifting speed between 75 and 115 km/h
-      speed = 75 + (new Date().getMinutes() % 20) * 2 + (parseInt(trainNumber.slice(-1)) || 0);
+    function getRealisticSpeed(name: string, isMovingTrain: boolean) {
+      if (!isMovingTrain) return 0;
+      let baseSpeed = 65;
+      const nameUpper = (name || '').toUpperCase();
+      if (nameUpper.includes('VANDE BHARAT')) {
+        baseSpeed = 110;
+      } else if (nameUpper.includes('RAJDHANI') || nameUpper.includes('SHATABDI') || nameUpper.includes('DURONTO') || nameUpper.includes('TEJAS')) {
+        baseSpeed = 95;
+      } else if (nameUpper.includes('SUPERFAST') || nameUpper.includes('SF')) {
+        baseSpeed = 75;
+      } else if (nameUpper.includes('MEMU') || nameUpper.includes('DEMU') || nameUpper.includes('PASSENGER') || nameUpper.includes('LOCAL')) {
+        baseSpeed = 40;
+      }
+      const fluctuation = (new Date().getMinutes() % 11) - 5; 
+      return Math.max(0, baseSpeed + fluctuation);
     }
 
-    let etaStr = '';
+    const speed = getRealisticSpeed(data.trainName || '', isMoving);
     // Prefer the next stopping station for ETA
     const nextStoppingStation = stations.find(s => s.status === 'upcoming' && (s.scheduledArrival !== '--:--' || s.scheduledDeparture !== '--:--'));
     const targetForEta = nextStoppingStation || nextStation || destination;
