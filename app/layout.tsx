@@ -9,12 +9,12 @@ import Script from 'next/script';
 const inter = Inter({ subsets: ['latin'], display: 'swap' });
 
 export const metadata: Metadata = {
-  title: 'RailPulse — Live Indian Train Tracker',
+  title: 'Live Train Running Status - Spot Your Train | RailPulse',
   description:
-    'Experience train tracking redefined. Real-time Indian Railways tracking with interactive vector maps, delay analytics, weather intelligence, and terrain insights.',
+    'Check live train running status, exact train location, delay, and NTES spot your train on map. Fastest real-time Indian Railways tracking.',
   keywords: [
+    'live train running status', 'spot your train', 'where is my train', 'ntes live status', 
     'train tracking', 'RailPulse', 'live train status', 'Indian Railways', 'train map', 'IRCTC train', 
-    'spot your train', 'ntes live status', 'where is my train', 'train running status', 
     'live station departures', 'train delay status', 'exact train location map', 
     'PNR status', 'seat availability'
   ],

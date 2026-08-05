@@ -119,8 +119,8 @@ export default function HomePage() {
             <span>Real-time Railway Intelligence</span>
           </div>
 
-          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-6xl">
-            Live Train Tracking & <span className="text-rail-blue">Analytics.</span>
+          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-5xl lg:text-6xl">
+            Live Train Running <span className="text-rail-blue">Status.</span>
           </h1>
 
           <p className="mt-4 text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-xl mx-auto">
