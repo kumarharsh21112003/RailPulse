@@ -353,20 +353,26 @@ function addMinutesToTime(timeStr: string | undefined, mins: number): string | u
     }
 
     let etaStr = '';
-    const targetForEta = nextStation || destination;
+    // Prefer the next stopping station for ETA
+    const nextStoppingStation = stations.find(s => s.status === 'upcoming' && (s.scheduledArrival !== '--:--' || s.scheduledDeparture !== '--:--'));
+    const targetForEta = nextStoppingStation || nextStation || destination;
 
     if (targetForEta) {
-      const timeStr = targetForEta.actualArrival && targetForEta.actualArrival !== '--:--' 
+      let timeStr = targetForEta.actualArrival && targetForEta.actualArrival !== '--:--' 
         ? targetForEta.actualArrival 
-        : (targetForEta.scheduledArrival && targetForEta.scheduledArrival !== '--:--' ? targetForEta.scheduledArrival : null);
+        : null;
       
+      if (!timeStr && targetForEta.scheduledArrival && targetForEta.scheduledArrival !== '--:--') {
+        const delayToUse = targetForEta.delayMinutes > 0 ? targetForEta.delayMinutes : currentOverallDelay;
+        timeStr = addMinutesToTime(targetForEta.scheduledArrival, delayToUse);
+      }
+
       if (timeStr) {
         etaStr = `${targetForEta.name} at ${timeStr}`;
       } else {
-        // If API provides no time for the immediate next station, we calculate a highly realistic ETA 
-        // using the remaining distance and current live speed!
+        // Fallback for passing stations with no scheduled times: calculate by live speed
         const distRemaining = Math.max(0, targetForEta.distanceKm - distanceCoveredKm);
-        const currentSpeed = speed > 0 ? speed : 75; // Use simulated speed or default
+        const currentSpeed = speed > 0 ? speed : 75;
         const minutesNeeded = Math.round((distRemaining / currentSpeed) * 60);
         
         // Convert current time to IST and add minutes
