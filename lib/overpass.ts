@@ -64,7 +64,11 @@ export async function getTerrainFeatures(
     const query = buildOverpassQuery(minLat, minLng, maxLat, maxLng);
     const res = await fetch('https://overpass-api.de/api/interpreter', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      headers: { 
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'User-Agent': 'RailPulse/1.0 (contact@railpulse.app)',
+        'Accept': 'application/json'
+      },
       body: `data=${encodeURIComponent(query)}`,
     });
 

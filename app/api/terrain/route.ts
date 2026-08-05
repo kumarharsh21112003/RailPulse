@@ -7,15 +7,24 @@ import { ApiResponse } from '@/types/api';
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const trainId = searchParams.get('trainId');
+  const latParam = searchParams.get('lat');
+  const lngParam = searchParams.get('lng');
 
-  if (!trainId) {
+  if (!trainId && (!latParam || !lngParam)) {
     return NextResponse.json<ApiResponse<never>>(
-      { success: false, error: 'trainId is required', timestamp: new Date().toISOString() },
+      { success: false, error: 'trainId or lat/lng is required', timestamp: new Date().toISOString() },
       { status: 400 }
     );
   }
 
-  const cacheKey = `terrain:${trainId}`;
+  let cacheKey = `terrain:${trainId}`;
+  if (latParam && lngParam) {
+    // Round to 1 decimal place (~11km precision) to reuse cache for nearby locations
+    const latRound = parseFloat(latParam).toFixed(1);
+    const lngRound = parseFloat(lngParam).toFixed(1);
+    cacheKey = `terrain:loc:${latRound},${lngRound}`;
+  }
+
   const cached = getCached<TerrainFeature[]>(cacheKey);
   if (cached) {
     return NextResponse.json<ApiResponse<TerrainFeature[]>>({
@@ -37,9 +46,21 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    const routeCoords =
-      journey.routeGeometry ||
-      journey.stations.filter((s) => s.lat && s.lng).map((s) => [s.lng, s.lat] as [number, number]);
+    let routeCoords: [number, number][] = [];
+
+    if (latParam && lngParam) {
+      const lat = parseFloat(latParam);
+      const lng = parseFloat(lngParam);
+      // Create a localized bounding box around the current location (roughly ~50km radius)
+      routeCoords = [
+        [lng - 0.5, lat - 0.5],
+        [lng + 0.5, lat + 0.5],
+      ];
+    } else if (journey) {
+      routeCoords =
+        journey.routeGeometry ||
+        journey.stations.filter((s) => s.lat && s.lng).map((s) => [s.lng, s.lat] as [number, number]);
+    }
 
     const features = await getTerrainFeatures(routeCoords);
 
