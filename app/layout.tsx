@@ -50,11 +50,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://api.railradar.in" />
         <link rel="preconnect" href="https://api.maptiler.com" />
         <link rel="preconnect" href="https://api.openweathermap.org" />
-        <script
+        <Script
+          id="adsense"
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2898236477566874"
           crossOrigin="anonymous"
-        ></script>
+          strategy="lazyOnload"
+        />
       </head>
       <body
         className={`${inter.className} min-h-full flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100`}
