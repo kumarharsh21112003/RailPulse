@@ -6,6 +6,7 @@ import { LiveJourney } from '@/types/train';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
+export const maxDuration = 60; // Allow Vercel to run up to 60s for slow IRCTC APIs
 
 export async function GET(
   request: NextRequest,

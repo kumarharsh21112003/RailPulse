@@ -16,7 +16,7 @@ export async function fetchConfirmTktLiveStatus(trainNumber: string, date?: stri
   const url = `https://www.confirmtkt.com/train-running-status/${trainNumber}`;
   
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 4000); // 4 second timeout to prevent Vercel 10s limit
+  const timeoutId = setTimeout(() => controller.abort(), 15000); // Wait 15 seconds to guarantee real data
   try {
     const res = await fetch(url, {
       headers: {
