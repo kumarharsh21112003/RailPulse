@@ -18,6 +18,11 @@ const nextConfig = {
       },
     ],
   },
+  experimental: {
+    outputFileTracingIncludes: {
+      '/api/passing-stations': ['./data/railway_graph.json'],
+    }
+  }
 };
 
 export default withPWA(nextConfig);

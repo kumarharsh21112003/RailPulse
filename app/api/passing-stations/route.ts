@@ -62,7 +62,7 @@ function findShortestPath(graphData: any, fromLat: number, fromLng: number, toLa
     if (distT < toDist) { toDist = distT; toId = nodeId; }
   }
 
-  if (!fromId || !toId || fromDist > 10 || toDist > 10) {
+  if (!fromId || !toId || fromDist > 50 || toDist > 50) {
     return null; // Nodes too far or not found
   }
 
