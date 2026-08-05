@@ -38,6 +38,26 @@ export function MobileJourneySummary({ journey }: MobileJourneySummaryProps) {
         </span>
       </div>
 
+      {/* Running Days */}
+      <div className="flex items-center gap-1 -mt-1 mb-2">
+        {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => {
+          const isRunning = (journey.runDays || ['1','1','1','1','1','1','1'])[i] === '1';
+          return (
+            <span
+              key={i}
+              className={cn(
+                "flex h-[15px] w-[15px] items-center justify-center rounded-full text-[8px] font-bold",
+                isRunning
+                  ? "bg-rail-blue text-white"
+                  : "bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500"
+              )}
+            >
+              {day}
+            </span>
+          );
+        })}
+      </div>
+
       {/* Progress bar */}
       <div>
         <div className="flex items-center justify-between text-[11px] text-slate-500 mb-1">
