@@ -282,6 +282,7 @@ export default function TrainJourneyPage({ params }: { params: { id: string } })
           <Timeline
             stations={journey.stations}
             currentStationCode={journey.currentStation?.code}
+            distanceCoveredKm={journey.distanceCoveredKm}
           />
         </div>
       </div>

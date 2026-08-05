@@ -29,9 +29,10 @@ interface TimelineProps {
   stations: Station[];
   currentStationCode?: string;
   className?: string;
+  distanceCoveredKm?: number;
 }
 
-export function Timeline({ stations, currentStationCode, className }: TimelineProps) {
+export function Timeline({ stations, currentStationCode, className, distanceCoveredKm }: TimelineProps) {
   return (
     <div className={cn('glass-panel rounded-3xl p-6 shadow-glass', className)}>
       <h3 className="mb-6 text-lg font-bold text-slate-900 dark:text-white">
@@ -137,7 +138,7 @@ export function Timeline({ stations, currentStationCode, className }: TimelinePr
               
               {/* Insert Passing Stations Accordion between this station and the next */}
               {idx < stations.length - 1 && (
-                <PassingStationsAccordion from={st} to={stations[idx + 1]} />
+                <PassingStationsAccordion from={st} to={stations[idx + 1]} distanceCoveredKm={distanceCoveredKm} />
               )}
             </React.Fragment>
           );
