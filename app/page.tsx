@@ -488,6 +488,8 @@ export default function HomePage() {
             <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">{f.desc}</p>
           </motion.div>
         ))}
+      </section>
+
       {/* ─── SEO Content & Internal Links (Footer) ─────────────────────────── */}
       <section className="mt-16 border-t border-slate-200 dark:border-slate-800 pt-10 pb-8 text-sm">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
