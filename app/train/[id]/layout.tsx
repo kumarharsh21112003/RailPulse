@@ -39,11 +39,20 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
       description,
       type: 'website',
       url: `https://railpulse.co.in/train/${params.id}`,
+      images: [
+        {
+          url: `https://railpulse.co.in/api/og/train?trainNo=${train.number}`,
+          width: 1200,
+          height: 630,
+          alt: `${train.number} ${train.name} Live Status`,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
+      images: [`https://railpulse.co.in/api/og/train?trainNo=${train.number}`],
     }
   };
 }

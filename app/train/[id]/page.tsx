@@ -76,16 +76,20 @@ export default function TrainJourneyPage({ params }: { params: { id: string } })
   const handleShare = () => {
     if (typeof window === 'undefined') return;
     const shareUrl = window.location.href;
+    const trainName = journey?.name || `Train #${trainId}`;
+    const shareTitle = `🚆 Tracking ${trainName} live on RailPulse!`;
+    const shareText = `📍 Click to see exact location and live delay status for ${trainName} (${trainId}):\n\n`;
+
     if (typeof navigator.share === 'function') {
       navigator
-        .share({ title: `RailGaadi – ${journey?.name || `Train #${trainId}`}`, url: shareUrl })
+        .share({ title: shareTitle, text: shareText, url: shareUrl })
         .catch(() => {
-          navigator.clipboard.writeText(shareUrl);
+          navigator.clipboard.writeText(`${shareTitle}\n${shareText}${shareUrl}`);
           setCopied(true);
           setTimeout(() => setCopied(false), 2000);
         });
     } else {
-      navigator.clipboard.writeText(shareUrl);
+      navigator.clipboard.writeText(`${shareTitle}\n${shareText}${shareUrl}`);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
