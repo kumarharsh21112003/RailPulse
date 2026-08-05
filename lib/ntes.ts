@@ -36,7 +36,7 @@ export async function fetchNtesRaw(query: string, retries = 1): Promise<any> {
   
   for (let attempt = 0; attempt <= retries; attempt++) {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout for 2G networks
+    const timeoutId = setTimeout(() => controller.abort(), 4000); // 4 second timeout to prevent Vercel 10s limit
     try {
       const res = await fetch('https://enquiry.indianrail.gov.in/crisns/AppServAnd', {
         method: 'POST',
