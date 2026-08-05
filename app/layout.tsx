@@ -59,6 +59,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body
         className={`${inter.className} min-h-full flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100`}
       >
+        <Script strategy="afterInteractive" src="https://www.googletagmanager.com/gtag/js?id=G-RLMF55ESS5" />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-RLMF55ESS5');
+          `}
+        </Script>
         <QueryProvider>
           <Navbar />
           <main className="flex-1 px-4 py-6 max-w-7xl mx-auto w-full pb-24 md:pb-6">
