@@ -44,6 +44,14 @@ export function Timeline({ stations, currentStationCode, className }: TimelinePr
             const isCurrent = st.status === 'current' || st.code === currentStationCode;
             const isUpcoming = st.status === 'upcoming';
             const delayInfo = formatDelay(st.delayMinutes);
+            
+            const baseScheduledTime = (st.scheduledArrival && st.scheduledArrival !== '--:--' && st.scheduledArrival !== '**UA**') 
+              ? st.scheduledArrival 
+              : st.scheduledDeparture;
+
+            const baseActualTime = (st.actualArrival && st.actualArrival !== '--:--' && st.actualArrival !== '**UA**')
+              ? st.actualArrival
+              : ((st.actualDeparture && st.actualDeparture !== '--:--' && st.actualDeparture !== '**UA**') ? st.actualDeparture : null);
 
             return (
               <div key={st.code + idx} className="relative flex items-start justify-between gap-4">
@@ -100,18 +108,18 @@ export function Timeline({ stations, currentStationCode, className }: TimelinePr
 
                 {/* Schedule vs Actual Timing */}
                 <div className="text-right font-mono flex flex-col items-end gap-0.5">
-                  {st.delayMinutes > 0 && st.scheduledArrival && st.scheduledArrival !== '--:--' && st.scheduledArrival !== '**UA**' && (
+                  {st.delayMinutes > 0 && baseScheduledTime && baseScheduledTime !== '--:--' && baseScheduledTime !== '**UA**' && (
                     <div className="text-[11px] text-slate-400 font-medium">
-                      {st.scheduledArrival}
+                      {baseScheduledTime}
                     </div>
                   )}
                   <div className={cn(
                     "font-bold text-sm",
                     st.delayMinutes > 0 ? "text-amber-600 dark:text-amber-500" : "text-slate-800 dark:text-slate-200"
                   )}>
-                    {(st.actualArrival && st.actualArrival !== '--:--' && st.actualArrival !== '**UA**')
-                      ? st.actualArrival 
-                      : calculateExpectedTime(st.scheduledArrival, st.delayMinutes)}
+                    {baseActualTime
+                      ? baseActualTime 
+                      : calculateExpectedTime(baseScheduledTime, st.delayMinutes)}
                   </div>
                   {st.delayMinutes > 0 ? (
                     <div className={cn('text-[10px] font-bold', delayInfo.color)}>
