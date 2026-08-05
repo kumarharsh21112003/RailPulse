@@ -3,6 +3,7 @@ import networkx as nx
 import math
 import json
 import sys
+from scipy.spatial import KDTree
 
 def haversine(lon1, lat1, lon2, lat2):
     R = 6371.0 # km
@@ -15,16 +16,24 @@ class WayHandler(osmium.SimpleHandler):
     def __init__(self):
         super().__init__()
         self.node_locations = {} # id -> (lon, lat)
-        self.station_nodes = {} # id -> {ref, name}
+        self.station_nodes = {} # id -> {ref, name, lon, lat}
         self.ways = []
         self.node_degrees = {}
 
     def node(self, n):
-        self.node_locations[n.id] = (n.location.lon, n.location.lat)
-        if 'railway' in n.tags and n.tags['railway'] in ('station', 'halt', 'stop'):
+        lon, lat = n.location.lon, n.location.lat
+        self.node_locations[n.id] = (lon, lat)
+        
+        is_station = False
+        if 'railway' in n.tags and n.tags['railway'] in ('station', 'halt', 'stop', 'stop_position'):
+            is_station = True
+        elif 'public_transport' in n.tags and n.tags['public_transport'] in ('station', 'stop_position', 'stop_area'):
+            is_station = True
+            
+        if is_station:
             ref = n.tags.get('ref', '')
             name = n.tags.get('name', '')
-            self.station_nodes[n.id] = {'ref': ref, 'name': name}
+            self.station_nodes[n.id] = {'ref': ref, 'name': name, 'lon': lon, 'lat': lat}
 
     def way(self, w):
         if 'railway' in w.tags and w.tags['railway'] in ('rail', 'narrow_gauge', 'light_rail'):
@@ -56,11 +65,42 @@ for way_nodes in handler.ways:
 
 print(f"Initial graph: {G.number_of_nodes()} nodes, {G.number_of_edges()} edges")
 
+print("Mapping off-track stations to nearest on-track nodes...")
+graph_nodes = list(G.nodes())
+graph_coords = [handler.node_locations[n] for n in graph_nodes]
+tree = KDTree(graph_coords)
+
+mapped_stations = {} # graph_node_id -> {ref, name}
+for st_id, st_data in handler.station_nodes.items():
+    if not st_data['name'] and not st_data['ref']:
+        continue
+    # Find nearest graph node
+    dist_degrees, idx = tree.query((st_data['lon'], st_data['lat']))
+    nearest_graph_node = graph_nodes[idx]
+    
+    n_lon, n_lat = handler.node_locations[nearest_graph_node]
+    dist_km = haversine(st_data['lon'], st_data['lat'], n_lon, n_lat)
+    
+    if dist_km < 2.0: # within 2km
+        if nearest_graph_node in mapped_stations:
+            existing = mapped_stations[nearest_graph_node]
+            if not existing['ref'] and st_data['ref']:
+                mapped_stations[nearest_graph_node] = st_data
+        else:
+            mapped_stations[nearest_graph_node] = st_data
+
+print(f"Mapped {len(mapped_stations)} stations to track nodes.")
+
+# Adjust weights to prefer station nodes
+for u, v, d in G.edges(data=True):
+    if u in mapped_stations or v in mapped_stations:
+        d['weight'] = d['weight'] * 0.5 # 50% discount for paths that go through stations!
+
 print("Simplifying graph...")
 # Remove non-station nodes of degree 2
 nodes_to_remove = []
 for n in list(G.nodes()):
-    if G.degree(n) == 2 and n not in handler.station_nodes:
+    if G.degree(n) == 2 and n not in mapped_stations:
         nodes_to_remove.append(n)
 
 for n in nodes_to_remove:
@@ -83,11 +123,11 @@ for n in G.nodes():
     if n in handler.node_locations:
         lon, lat = handler.node_locations[n]
         node_data = {'lat': lat, 'lon': lon}
-        if n in handler.station_nodes:
-            if handler.station_nodes[n]['ref']:
-                node_data['ref'] = handler.station_nodes[n]['ref']
-            if handler.station_nodes[n]['name']:
-                node_data['name'] = handler.station_nodes[n]['name']
+        if n in mapped_stations:
+            if mapped_stations[n]['ref']:
+                node_data['ref'] = mapped_stations[n]['ref']
+            if mapped_stations[n]['name']:
+                node_data['name'] = mapped_stations[n]['name']
             node_data['is_station'] = True
         export_data['nodes'][str(n)] = node_data
 
