@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Train, Info, MapPin } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Train, Info, MapPin, LayoutGrid } from 'lucide-react';
+import { SeatMap } from './SeatMap';
 
 const STANDARD_CONSIST = [
   'ENG', 'EOG', 'GS', 'GS', 'S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'PC', 
@@ -11,6 +12,7 @@ const STANDARD_CONSIST = [
 
 export function CoachPositionVisualizer({ trainNumber }: { trainNumber: string }) {
   const [selectedCoach, setSelectedCoach] = useState<string | null>(null);
+  const [showSeatMap, setShowSeatMap] = useState<boolean>(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const coachRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
@@ -26,6 +28,8 @@ export function CoachPositionVisualizer({ trainNumber }: { trainNumber: string }
         behavior: 'smooth'
       });
     }
+    // Auto-hide seat map when coach changes
+    setShowSeatMap(false);
   }, [selectedCoach]);
 
   const selectedIndex = selectedCoach ? STANDARD_CONSIST.indexOf(selectedCoach) : -1;
@@ -75,12 +79,31 @@ export function CoachPositionVisualizer({ trainNumber }: { trainNumber: string }
             <p className="text-blue-900 dark:text-blue-100 font-semibold">
               Coach <span className="text-xl px-1 font-bold">{selectedCoach}</span> is <span className="text-xl px-1 font-bold">{selectedIndex}</span> coaches away from the Engine.
             </p>
-            <p className="text-sm text-blue-700 dark:text-blue-300 mt-0.5">
-              Stand approximately {selectedIndex * 25} meters from where the engine stops.
-            </p>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3 mt-2">
+              <p className="text-sm text-blue-700 dark:text-blue-300">
+                Stand approximately {selectedIndex * 25} meters from where the engine stops.
+              </p>
+              
+              {/* Only show Seat Map button for valid reserved coaches */}
+              {!['ENG', 'EOG', 'PC', 'GS', 'SLR'].includes(selectedCoach) && (
+                <button
+                  onClick={() => setShowSeatMap(!showSeatMap)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg shadow-sm transition-colors"
+                >
+                  <LayoutGrid className="w-3.5 h-3.5" />
+                  {showSeatMap ? 'Hide Seat Layout' : 'View Seat Layout'}
+                </button>
+              )}
+            </div>
           </div>
         </motion.div>
       )}
+
+      <AnimatePresence>
+        {selectedCoach && showSeatMap && (
+          <SeatMap coachCode={selectedCoach} />
+        )}
+      </AnimatePresence>
 
       {/* Train Track Visualizer */}
       <div className="relative mt-8 bg-slate-50 dark:bg-slate-900/30 rounded-xl p-4 border border-slate-100 dark:border-slate-800">
