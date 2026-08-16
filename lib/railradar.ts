@@ -383,7 +383,7 @@ async function generateFallbackJourney(trainNumber: string, date?: string): Prom
       previousStation: isUpcoming ? undefined : stations[stations.length - 1],
       stations,
       updateMessage: isUpcoming 
-        ? 'Live data unavailable. Train has not started yet. Showing scheduled route.' 
+        ? `Train has not started from ${confirmTktData.origin.name} (${confirmTktData.origin.code}) yet.` 
         : 'Live data unavailable. Showing scheduled route.',
     };
   }
@@ -489,7 +489,7 @@ async function generateFallbackJourney(trainNumber: string, date?: string): Prom
       [destLng, destLat],
     ],
     updateMessage: isUpcoming
-      ? 'Live data unavailable. Train has not started yet. Showing scheduled route.'
+      ? `Train has not started from ${originName} (${originCode}) yet.`
       : 'Live data unavailable. Showing scheduled route.',
   };
 }
