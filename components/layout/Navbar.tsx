@@ -18,7 +18,7 @@ export function Navbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full px-4 pt-4 pb-2">
+    <header className="sticky top-0 z-50 w-full px-4 pt-4 pb-2 bg-slate-50 dark:bg-slate-950">
       <div className="glass-panel mx-auto flex max-w-7xl items-center justify-between rounded-2xl px-6 py-3 shadow-glass">
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
