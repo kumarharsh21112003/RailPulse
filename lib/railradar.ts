@@ -331,40 +331,60 @@ async function generateFallbackJourney(trainNumber: string, date?: string): Prom
   const confirmTktData = await fetchConfirmTktLiveStatus(trainNumber, undefined);
   
   if (confirmTktData && confirmTktData.stations.length > 2) {
-    const stations = confirmTktData.stations.map((s) => ({
-      ...s,
-      actualArrival: undefined,
-      actualDeparture: undefined,
-      delayMinutes: 0,
-      status: 'passed' as const, // For past dates, assume passed
-    }));
-
     let startDateStr = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date()).replace(/ /g, '-');
     if (date && date.match(/^\d{4}-\d{2}-\d{2}$/)) {
       startDateStr = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(date)).replace(/ /g, '-');
     }
 
+    // Check if the train is for today but hasn't started yet
+    const isToday = startDateStr === new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date()).replace(/ /g, '-');
+    const firstStation = confirmTktData.stations[0];
+    let isUpcoming = false;
+    
+    if (isToday && firstStation?.scheduledDeparture) {
+      const now = new Date();
+      const currentHours = now.getHours();
+      const currentMinutes = now.getMinutes();
+      const [depH, depM] = firstStation.scheduledDeparture.split(':').map(Number);
+      
+      if (!isNaN(depH) && !isNaN(depM)) {
+        if (currentHours < depH || (currentHours === depH && currentMinutes < depM)) {
+          isUpcoming = true;
+        }
+      }
+    }
+
+    const stations = confirmTktData.stations.map((s) => ({
+      ...s,
+      actualArrival: undefined,
+      actualDeparture: undefined,
+      delayMinutes: 0,
+      status: isUpcoming ? ('upcoming' as const) : ('passed' as const),
+    }));
+
     return {
       ...confirmTktData,
-      status: 'completed',
+      status: isUpcoming ? 'not_started' : 'completed',
       delayMinutes: 0,
       speedKmh: 0,
-      distanceCoveredKm: confirmTktData.totalDistanceKm,
-      remainingDistanceKm: 0,
-      completionPercentage: 100,
+      distanceCoveredKm: isUpcoming ? 0 : confirmTktData.totalDistanceKm,
+      remainingDistanceKm: isUpcoming ? confirmTktData.totalDistanceKm : 0,
+      completionPercentage: isUpcoming ? 0 : 100,
       startDate: startDateStr,
       lastUpdated: new Date().toISOString(),
-      ETA: 'Journey Completed',
+      ETA: isUpcoming ? 'Train Not Started Yet' : 'Journey Completed',
       currentLocation: {
         ...confirmTktData.currentLocation,
         speedKmh: 0,
         isMoving: false,
       },
       currentStation: undefined,
-      nextStation: undefined,
-      previousStation: stations[stations.length - 1],
+      nextStation: isUpcoming ? stations[0] : undefined,
+      previousStation: isUpcoming ? undefined : stations[stations.length - 1],
       stations,
-      updateMessage: 'Live data unavailable. Showing scheduled route.',
+      updateMessage: isUpcoming 
+        ? 'Live data unavailable. Train has not started yet. Showing scheduled route.' 
+        : 'Live data unavailable. Showing scheduled route.',
     };
   }
 
@@ -422,6 +442,19 @@ async function generateFallbackJourney(trainNumber: string, date?: string): Prom
     startDateStr = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(date)).replace(/ /g, '-');
   }
 
+  const isToday = startDateStr === new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date()).replace(/ /g, '-');
+  const now = new Date();
+  const currentHours = now.getHours();
+  let isUpcoming = false;
+  if (isToday && currentHours < 17) {
+    isUpcoming = true;
+  }
+
+  if (isUpcoming) {
+    stations[0].status = 'upcoming';
+    stations[1].status = 'upcoming';
+  }
+
   return {
     trainId: trainNumber,
     number: trainNumber,
@@ -429,25 +462,25 @@ async function generateFallbackJourney(trainNumber: string, date?: string): Prom
     origin: { code: originCode, name: originName },
     destination: { code: destCode, name: destName },
     currentLocation: {
-      lat: destLat,
-      lng: destLng,
+      lat: isUpcoming ? origLat : destLat,
+      lng: isUpcoming ? origLng : destLng,
       heading: 45,
       speedKmh: 0,
       isMoving: false,
     },
-    status: 'completed',
-    delayMinutes: 8,
+    status: isUpcoming ? 'not_started' : 'completed',
+    delayMinutes: isUpcoming ? 0 : 8,
     speedKmh: 0,
-    distanceCoveredKm: 1384,
-    remainingDistanceKm: 0,
+    distanceCoveredKm: isUpcoming ? 0 : 1384,
+    remainingDistanceKm: isUpcoming ? 1384 : 0,
     totalDistanceKm: 1384,
-    completionPercentage: 100,
+    completionPercentage: isUpcoming ? 0 : 100,
     lastUpdated: new Date().toISOString(),
     startDate: startDateStr,
-    ETA: `Journey Completed`,
-    previousStation: stations[1],
+    ETA: isUpcoming ? 'Train Not Started Yet' : 'Journey Completed',
+    previousStation: isUpcoming ? undefined : stations[1],
     currentStation: undefined,
-    nextStation: undefined,
+    nextStation: isUpcoming ? stations[0] : undefined,
     stations,
     routeGeometry: [
       [origLng, origLat],
@@ -455,7 +488,9 @@ async function generateFallbackJourney(trainNumber: string, date?: string): Prom
       [lng2, lat2],
       [destLng, destLat],
     ],
-    updateMessage: 'Live data unavailable. Showing scheduled route.',
+    updateMessage: isUpcoming
+      ? 'Live data unavailable. Train has not started yet. Showing scheduled route.'
+      : 'Live data unavailable. Showing scheduled route.',
   };
 }
 
