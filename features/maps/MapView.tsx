@@ -235,6 +235,7 @@ export default function MapView({ journey, className }: MapViewProps) {
 
     // ─ Camera ─
     if (followTrainMode) {
+      map.stop();
       map.easeTo({ center: [trainLng, trainLat], duration: 800 });
     }
   }, [journey, mapLoaded, followTrainMode, setFollowTrainMode]);
@@ -243,16 +244,32 @@ export default function MapView({ journey, className }: MapViewProps) {
   const recenter = () => {
     setFollowTrainMode(true);
     
-    // Smoothly fly to current train location while fitting bounds contextually
-    const trainLng = journey.currentLocation?.lng ?? 77.22;
-    const trainLat = journey.currentLocation?.lat ?? 28.64;
+    // We get the same trainLng, trainLat as the marker to prevent jumping
+    const coords: [number, number][] = journey.routeGeometry || journey.stations.filter((s) => s.lat && s.lng).map((s) => [s.lng, s.lat] as [number, number]);
+    let trainLng = journey.currentLocation?.lng;
+    let trainLat = journey.currentLocation?.lat;
     
-    mapRef.current?.flyTo({
-      center: [trainLng, trainLat],
-      zoom: 11,
-      duration: 1200,
-      pitch: 45
-    });
+    const isAtOrigin = trainLng === coords[0]?.[0] && trainLat === coords[0]?.[1];
+    if (!trainLng || !trainLat || (isAtOrigin && journey.completionPercentage > 2)) {
+      if (coords.length > 0) {
+        const [interpolatedLng, interpolatedLat] = getPolylinePoint(coords, journey.completionPercentage);
+        trainLng = interpolatedLng;
+        trainLat = interpolatedLat;
+      } else {
+        trainLng = 77.22;
+        trainLat = 28.64;
+      }
+    }
+    
+    if (mapRef.current) {
+      mapRef.current.stop(); // Stop any ongoing camera animations to prevent NaN corruption bug
+      mapRef.current.flyTo({
+        center: [trainLng, trainLat],
+        zoom: 11,
+        duration: 1200,
+        pitch: 45
+      });
+    }
   };
 
   return (
@@ -262,8 +279,8 @@ export default function MapView({ journey, className }: MapViewProps) {
       {/* Floating Controls */}
       <div className="absolute top-4 right-4 flex flex-col gap-2 z-10">
         {[
-          { icon: ZoomIn, action: () => mapRef.current?.zoomIn(), title: 'Zoom In' },
-          { icon: ZoomOut, action: () => mapRef.current?.zoomOut(), title: 'Zoom Out' },
+          { icon: ZoomIn, action: () => { setFollowTrainMode(false); mapRef.current?.stop(); mapRef.current?.zoomIn(); }, title: 'Zoom In' },
+          { icon: ZoomOut, action: () => { setFollowTrainMode(false); mapRef.current?.stop(); mapRef.current?.zoomOut(); }, title: 'Zoom Out' },
           { icon: Target, action: recenter, title: 'Center on Train', isActive: followTrainMode },
         ].map(({ icon: Icon, action, title, isActive }) => (
           <button
