@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Share2, Check, MapPin, CloudSun, Mountain, AlertCircle, Calendar, ChevronDown } from 'lucide-react';
+import { ArrowLeft, Share2, Check, MapPin, CloudSun, Mountain, AlertCircle, Calendar, ChevronDown, Train } from 'lucide-react';
 import { format, subDays, parse } from 'date-fns';
 import { useLiveJourney } from '@/hooks/useLiveJourney';
 import { JourneyCard } from '@/components/journey/JourneyCard';
@@ -14,6 +14,7 @@ import { AnalyticsDashboard } from '@/features/analytics/AnalyticsDashboard';
 import { TerrainPanel } from '@/features/terrain/TerrainPanel';
 import { MobileJourneySummary } from '@/components/layout/MobileJourneySummary';
 import { FavoriteButton } from '@/features/favorites/FavoriteButton';
+import { CoachPositionVisualizer } from '@/components/train/CoachPositionVisualizer';
 import { cn } from '@/utils/cn';
 import dynamic from 'next/dynamic';
 
@@ -28,6 +29,7 @@ const MapView = dynamic(() => import('@/features/maps/MapView'), {
 
 const TABS = [
   { id: 'map', label: 'Live Map', icon: MapPin },
+  { id: 'coach', label: 'Coach Layout', icon: Train },
   { id: 'weather', label: 'Weather', icon: CloudSun },
   { id: 'analytics', label: 'Terrain & Analytics', icon: Mountain },
 ] as const;
@@ -268,6 +270,7 @@ export default function TrainJourneyPage({ params }: { params: { id: string } })
         {/* Active feature panel */}
         <div className="lg:col-span-7 xl:col-span-8 space-y-6">
           {activeTab === 'map' && <MapView journey={journey} className="h-[480px] w-full" />}
+          {activeTab === 'coach' && <CoachPositionVisualizer trainNumber={journey.number} />}
           {activeTab === 'weather' && <WeatherPanel journey={journey} />}
           {activeTab === 'analytics' && (
             <>
