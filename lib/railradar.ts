@@ -291,6 +291,25 @@ function normaliseLiveResponse(raw: RRLiveResponse, routeGeo?: [number, number][
   };
 }
 
+function cleanRouteGeometry(coords: [number, number][] | undefined): [number, number][] | undefined {
+  if (!coords || coords.length < 2) return coords;
+  const cleaned = [coords[0]];
+  for (let i = 1; i < coords.length; i++) {
+    const prev = cleaned[cleaned.length - 1];
+    const curr = coords[i];
+    const dx = curr[0] - prev[0];
+    const dy = curr[1] - prev[1];
+    const distSq = dx * dx + dy * dy;
+    // 25 degrees squared is approx 550+ km straight line.
+    // If consecutive route points jump this far, it's a corrupted API coordinate.
+    if (distSq > 25) { 
+       continue;
+    }
+    cleaned.push(curr);
+  }
+  return cleaned;
+}
+
 async function fetchRouteGeometry(trainNumber: string): Promise<[number, number][] | undefined> {
   try {
     const res = await rrFetch(`${RR_BASE}/trains/${trainNumber}/route`, {
@@ -302,9 +321,9 @@ async function fetchRouteGeometry(trainNumber: string): Promise<[number, number]
     const coords: [number, number][] | undefined = json?.data?.geojson?.geometry?.coordinates;
     if (coords && coords.length > 200) {
       const step = Math.ceil(coords.length / 200);
-      return coords.filter((_, i) => i % step === 0);
+      return cleanRouteGeometry(coords.filter((_, i) => i % step === 0));
     }
-    return coords;
+    return cleanRouteGeometry(coords);
   } catch {
     return undefined;
   }
