@@ -331,23 +331,23 @@ async function generateFallbackJourney(trainNumber: string, date?: string): Prom
   const confirmTktData = await fetchConfirmTktLiveStatus(trainNumber, undefined);
   
   if (confirmTktData && confirmTktData.stations.length > 2) {
-    let startDateStr = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date()).replace(/ /g, '-');
+    let startDateStr = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' }).format(new Date()).replace(/ /g, '-');
     if (date && date.match(/^\d{4}-\d{2}-\d{2}$/)) {
-      startDateStr = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(date)).replace(/ /g, '-');
+      startDateStr = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' }).format(new Date(date)).replace(/ /g, '-');
     }
 
     // Check if the train is for today but hasn't started yet
-    const isToday = startDateStr === new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date()).replace(/ /g, '-');
+    const todayStr = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' }).format(new Date()).replace(/ /g, '-');
+    const isToday = startDateStr === todayStr;
     const firstStation = confirmTktData.stations[0];
     let isUpcoming = false;
     
     if (isToday && firstStation?.scheduledDeparture) {
-      const now = new Date();
-      const currentHours = now.getHours();
-      const currentMinutes = now.getMinutes();
+      const nowStr = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata', hour12: false, hour: 'numeric', minute: 'numeric' });
+      const [currentHours, currentMinutes] = nowStr.split(':').map(Number);
       const [depH, depM] = firstStation.scheduledDeparture.split(':').map(Number);
       
-      if (!isNaN(depH) && !isNaN(depM)) {
+      if (!isNaN(depH) && !isNaN(depM) && !isNaN(currentHours) && !isNaN(currentMinutes)) {
         if (currentHours < depH || (currentHours === depH && currentMinutes < depM)) {
           isUpcoming = true;
         }
@@ -442,11 +442,11 @@ async function generateFallbackJourney(trainNumber: string, date?: string): Prom
     startDateStr = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(date)).replace(/ /g, '-');
   }
 
-  const isToday = startDateStr === new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date()).replace(/ /g, '-');
-  const now = new Date();
-  const currentHours = now.getHours();
+  const isToday = startDateStr === new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' }).format(new Date()).replace(/ /g, '-');
+  const nowStr = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata', hour12: false, hour: 'numeric' });
+  const currentHours = parseInt(nowStr, 10);
   let isUpcoming = false;
-  if (isToday && currentHours < 17) {
+  if (isToday && !isNaN(currentHours) && currentHours < 17) {
     isUpcoming = true;
   }
 
