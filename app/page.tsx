@@ -501,6 +501,7 @@ export default function HomePage() {
               <li><Link href="/train/22436" className="hover:text-rail-blue transition-colors">22436 - Vande Bharat Express</Link></li>
               <li><Link href="/train/12621" className="hover:text-rail-blue transition-colors">12621 - Tamil Nadu Exp</Link></li>
               <li><Link href="/train/12004" className="hover:text-rail-blue transition-colors">12004 - LJN NDLS Shatabdi</Link></li>
+              <li className="pt-2"><Link href="/directory/trains" className="text-rail-blue hover:underline font-medium">Browse All Trains →</Link></li>
             </ul>
           </div>
           <div>
@@ -511,6 +512,7 @@ export default function HomePage() {
               <li><Link href="/station/CSMT" className="hover:text-rail-blue transition-colors">CSMT - Mumbai CSMT Trains</Link></li>
               <li><Link href="/station/SBC" className="hover:text-rail-blue transition-colors">SBC - KSR Bengaluru Status</Link></li>
               <li><Link href="/station/PNBE" className="hover:text-rail-blue transition-colors">PNBE - Patna Jn Live</Link></li>
+              <li className="pt-2"><Link href="/directory/stations" className="text-rail-blue hover:underline font-medium">Browse All Stations →</Link></li>
             </ul>
           </div>
           <div>
@@ -518,8 +520,8 @@ export default function HomePage() {
             <ul className="space-y-2 text-slate-500 dark:text-slate-400">
               <li><Link href="/" className="hover:text-rail-blue transition-colors">Live Train Running Status</Link></li>
               <li><Link href="/between" className="hover:text-rail-blue transition-colors">Trains Between Stations</Link></li>
-              <li><Link href="/" className="hover:text-rail-blue transition-colors">Spot Your Train (NTES)</Link></li>
-              <li><Link href="/" className="hover:text-rail-blue transition-colors">PNR Status Check</Link></li>
+              <li><Link href="/directory/trains" className="hover:text-rail-blue transition-colors">Train Schedule Directory</Link></li>
+              <li><Link href="/directory/stations" className="hover:text-rail-blue transition-colors">Station Live Board Directory</Link></li>
             </ul>
           </div>
           <div>
