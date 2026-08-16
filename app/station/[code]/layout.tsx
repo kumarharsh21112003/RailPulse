@@ -49,11 +49,20 @@ export async function generateMetadata({ params }: { params: { code: string } })
       description,
       type: 'website',
       url: `https://railpulse.co.in/station/${code}`,
+      images: [
+        {
+          url: `https://railpulse.co.in/api/og/station?code=${code}`,
+          width: 1200,
+          height: 630,
+          alt: `${station.stnName} Live Arrivals and Departures`,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
+      images: [`https://railpulse.co.in/api/og/station?code=${code}`],
     }
   };
 }
