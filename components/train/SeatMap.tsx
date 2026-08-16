@@ -85,9 +85,10 @@ function generate2AC(totalSeats: number = 54): Compartment[] {
 
 function getCoachLayout(coachCode: string) {
   const prefix = coachCode.replace(/[0-9]/g, '');
-  if (prefix === 'B' || prefix === 'S') return { type: '3AC/Sleeper', data: generate3AC(prefix === 'S' ? 80 : 72) };
+  if (prefix === 'B' || prefix === 'S' || prefix === 'G') return { type: '3AC/Sleeper', data: generate3AC(prefix === 'S' || prefix === 'G' ? 80 : 72) };
   if (prefix === 'A') return { type: '2AC', data: generate2AC(54) };
   if (prefix === 'H') return { type: '1AC', data: [] }; // 1AC logic is more complex (Coupes/Cabins), skip visual map for now
+  if (prefix === 'C' || prefix === 'D' || prefix === 'E') return { type: 'Chair Car', data: [] }; // Chair car layout is 3x2, to be implemented
   return { type: 'UNRESERVED', data: [] };
 }
 
@@ -97,7 +98,7 @@ export function SeatMap({ coachCode }: { coachCode: string }) {
   if (data.length === 0) {
     return (
       <div className="bg-slate-50 dark:bg-slate-900/50 rounded-xl p-8 text-center border border-slate-200 dark:border-slate-800 mt-4">
-        <p className="text-slate-500 font-medium">Visual seat layout is not available for {coachCode} ({type === '1AC' ? 'First AC cabins' : 'Unreserved/Pantry'}).</p>
+        <p className="text-slate-500 font-medium">Visual seat layout is not available for {coachCode} ({type === '1AC' ? 'First AC cabins' : type === 'Chair Car' ? 'Chair Car seating' : 'Unreserved/Pantry'}).</p>
       </div>
     );
   }

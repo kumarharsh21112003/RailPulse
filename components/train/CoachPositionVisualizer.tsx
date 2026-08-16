@@ -5,13 +5,51 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Train, Info, MapPin, LayoutGrid } from 'lucide-react';
 import { SeatMap } from './SeatMap';
 
-const STANDARD_CONSIST = [
-  'ENG', 'EOG', 'GS', 'GS', 'S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'PC', 
-  'B1', 'B2', 'B3', 'B4', 'B5', 'A1', 'A2', 'H1', 'GS', 'SLR'
-];
+function getConsistForTrain(trainName?: string): string[] {
+  if (!trainName) return ['ENG', 'EOG', 'GS', 'GS', 'S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'PC', 'B1', 'B2', 'B3', 'B4', 'B5', 'A1', 'A2', 'H1', 'GS', 'SLR'];
+  
+  const name = trainName.toLowerCase();
+  
+  if (name.includes('vande bharat')) {
+    return ['ENG', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'E1', 'E2', 'C8', 'C9', 'C10', 'C11', 'C12', 'C13', 'C14', 'ENG'];
+  }
+  
+  if (name.includes('jan shatabdi') || name.includes('janshatabdi')) {
+    return ['ENG', 'D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8', 'D9', 'D10', 'C1', 'C2', 'C3', 'SLR'];
+  }
+  
+  if (name.includes('shatabdi')) {
+    return ['ENG', 'EOG', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'E1', 'E2', 'EOG'];
+  }
+  
+  if (name.includes('rajdhani')) {
+    return ['ENG', 'EOG', 'B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'PC', 'A1', 'A2', 'A3', 'A4', 'A5', 'H1', 'EOG'];
+  }
+  
+  if (name.includes('garib rath')) {
+    return ['ENG', 'EOG', 'G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G7', 'G8', 'G9', 'G10', 'G11', 'G12', 'G13', 'G14', 'EOG'];
+  }
+  
+  if (name.includes('tejas')) {
+    return ['ENG', 'EOG', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'E1', 'E2', 'EOG'];
+  }
+  
+  if (name.includes('double decker')) {
+    return ['ENG', 'EOG', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'EOG'];
+  }
+  
+  if (name.includes('humsafar')) {
+    return ['ENG', 'EOG', 'B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9', 'B10', 'B11', 'B12', 'B13', 'B14', 'B15', 'B16', 'PC', 'EOG'];
+  }
+  
+  // Default Express / Mail standard consist
+  return ['ENG', 'EOG', 'GS', 'GS', 'S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'PC', 'B1', 'B2', 'B3', 'B4', 'B5', 'A1', 'A2', 'H1', 'GS', 'SLR'];
+}
 
-export function CoachPositionVisualizer({ trainNumber }: { trainNumber: string }) {
+
+export function CoachPositionVisualizer({ trainNumber, trainName }: { trainNumber: string; trainName?: string }) {
   const [selectedCoach, setSelectedCoach] = useState<string | null>(null);
+  const consist = getConsistForTrain(trainName);
   const [showSeatMap, setShowSeatMap] = useState<boolean>(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const coachRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
@@ -32,7 +70,7 @@ export function CoachPositionVisualizer({ trainNumber }: { trainNumber: string }
     setShowSeatMap(false);
   }, [selectedCoach]);
 
-  const selectedIndex = selectedCoach ? STANDARD_CONSIST.indexOf(selectedCoach) : -1;
+  const selectedIndex = selectedCoach ? consist.indexOf(selectedCoach) : -1;
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700/50 mt-6 overflow-hidden">
@@ -55,7 +93,7 @@ export function CoachPositionVisualizer({ trainNumber }: { trainNumber: string }
             onChange={(e) => setSelectedCoach(e.target.value)}
           >
             <option value="" disabled>Select Coach</option>
-            {STANDARD_CONSIST.map((coach, idx) => (
+            {consist.map((coach, idx) => (
               coach !== 'ENG' && (
                 <option key={`${coach}-${idx}`} value={coach}>
                   {coach}
@@ -115,7 +153,7 @@ export function CoachPositionVisualizer({ trainNumber }: { trainNumber: string }
           {/* Vertical Track Line */}
           <div className="absolute top-0 bottom-0 w-1 bg-slate-300 dark:bg-slate-700 rounded-full z-0 left-1/2 -translate-x-1/2" />
           
-          {STANDARD_CONSIST.map((coach, idx) => {
+          {consist.map((coach, idx) => {
             const isEngine = coach === 'ENG';
             const isSelected = coach === selectedCoach;
             
