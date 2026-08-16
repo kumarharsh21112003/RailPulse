@@ -19,10 +19,10 @@ export function CoachPositionVisualizer({ trainNumber }: { trainNumber: string }
       const coachElement = coachRefs.current[selectedCoach];
       const container = scrollRef.current;
       
-      const scrollLeft = coachElement.offsetLeft - (container.offsetWidth / 2) + (coachElement.offsetWidth / 2);
+      const scrollTop = coachElement.offsetTop - (container.offsetHeight / 2) + (coachElement.offsetHeight / 2);
       
       container.scrollTo({
-        left: scrollLeft,
+        top: scrollTop,
         behavior: 'smooth'
       });
     }
@@ -83,15 +83,15 @@ export function CoachPositionVisualizer({ trainNumber }: { trainNumber: string }
       )}
 
       {/* Train Track Visualizer */}
-      <div className="relative mt-8">
-        {/* The Track Line */}
-        <div className="absolute top-1/2 left-0 right-0 h-1 bg-slate-200 dark:bg-slate-700 -translate-y-1/2 rounded-full z-0" />
-        
+      <div className="relative mt-8 bg-slate-50 dark:bg-slate-900/30 rounded-xl p-4 border border-slate-100 dark:border-slate-800">
         <div 
           ref={scrollRef}
-          className="relative z-10 flex items-center gap-2 overflow-x-auto py-4 px-4 scroll-smooth hide-scrollbar snap-x snap-mandatory"
+          className="relative z-10 flex flex-col items-center gap-2 h-[450px] overflow-y-auto py-8 scroll-smooth hide-scrollbar snap-y snap-mandatory"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
+          {/* Vertical Track Line */}
+          <div className="absolute top-0 bottom-0 w-1 bg-slate-300 dark:bg-slate-700 rounded-full z-0 left-1/2 -translate-x-1/2" />
+          
           {STANDARD_CONSIST.map((coach, idx) => {
             const isEngine = coach === 'ENG';
             const isSelected = coach === selectedCoach;
@@ -100,51 +100,38 @@ export function CoachPositionVisualizer({ trainNumber }: { trainNumber: string }
               <div 
                 key={`${coach}-${idx}`}
                 ref={(el) => { coachRefs.current[coach] = el; }}
-                className={`snap-center flex-shrink-0 flex items-center transition-all duration-300 ${isSelected ? 'scale-110 mx-2' : ''}`}
+                className={`snap-center flex-shrink-0 flex flex-col items-center transition-all duration-300 z-10 ${isSelected ? 'scale-110 my-4' : ''}`}
                 onClick={() => !isEngine && setSelectedCoach(coach)}
               >
-                {/* Connecting Joint */}
+                {/* Connecting Joint (Vertical) */}
                 {idx > 0 && (
-                  <div className="w-2 h-1 bg-slate-400 dark:bg-slate-600" />
+                  <div className="w-1 h-3 bg-slate-400 dark:bg-slate-600 my-0.5" />
                 )}
                 
                 {/* Coach Body */}
                 <div 
                   className={`
-                    relative h-16 rounded-lg flex items-center justify-center font-bold text-lg cursor-pointer
+                    relative w-32 h-16 rounded-lg flex flex-col items-center justify-center font-bold text-xl cursor-pointer
                     shadow-sm border-2 transition-colors
                     ${isEngine 
-                      ? 'w-24 bg-rose-500 border-rose-600 text-white rounded-l-[2rem] rounded-r-md cursor-default' 
+                      ? 'bg-rose-500 border-rose-600 text-white rounded-t-[1.5rem] rounded-b-md cursor-default' 
                       : isSelected 
-                        ? 'w-20 bg-blue-500 border-blue-600 text-white ring-4 ring-blue-500/20' 
-                        : 'w-20 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:border-blue-400 dark:hover:border-blue-500'
+                        ? 'bg-blue-500 border-blue-600 text-white ring-4 ring-blue-500/30' 
+                        : 'bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:border-blue-400 dark:hover:border-blue-500'
                     }
                   `}
                 >
                   {coach}
                   
-                  {/* Wheels */}
-                  <div className={`absolute -bottom-1.5 left-2 w-3 h-3 rounded-full ${isEngine ? 'bg-rose-900' : 'bg-slate-800 dark:bg-black'}`} />
-                  <div className={`absolute -bottom-1.5 right-2 w-3 h-3 rounded-full ${isEngine ? 'bg-rose-900' : 'bg-slate-800 dark:bg-black'}`} />
-                  
-                  {/* Engine Window */}
-                  {isEngine && (
-                    <div className="absolute top-2 left-3 w-4 h-5 bg-sky-200 rounded-sm opacity-80" />
-                  )}
-
-                  {/* Coach Windows */}
-                  {!isEngine && (
-                    <div className="absolute top-2 left-0 right-0 flex justify-center gap-1.5 opacity-30">
-                      <div className="w-3 h-3 bg-slate-900 rounded-sm" />
-                      <div className="w-3 h-3 bg-slate-900 rounded-sm" />
-                      <div className="w-3 h-3 bg-slate-900 rounded-sm" />
-                    </div>
-                  )}
-                  
                   {/* Sequence Number Label */}
-                  <div className="absolute -bottom-7 text-[10px] font-medium text-slate-400">
+                  <div className={`absolute text-[10px] font-medium opacity-80 ${isEngine ? 'top-1 text-rose-100' : 'bottom-1 text-slate-400 dark:text-slate-500'}`}>
                     {idx === 0 ? 'Engine' : `#${idx}`}
                   </div>
+
+                  {/* Engine specific styling (Headlight etc) */}
+                  {isEngine && (
+                    <div className="absolute top-1.5 w-10 h-1 bg-rose-300 rounded-full opacity-60" />
+                  )}
                 </div>
               </div>
             );
